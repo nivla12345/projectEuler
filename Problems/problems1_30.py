@@ -504,6 +504,7 @@ def p18():
     return num_sundays_in_january
 
 
+# Sum the digits of 100!
 def p20():
     hundred_factorial = str(math.factorial(100))
     sum_digits = 0
@@ -512,6 +513,20 @@ def p20():
     return sum_digits
 
 
+# Sum all amicable numbers < 10000
+# Given function d(n) = m, where d is the sum of the divisors < n, d(m) == d(n) implies m and n are amicable numbers.
 def p21():
-    return Tools.sum_divisors(284)
-
+    sum_amicable_numbers = 504
+    count = 2
+    seen_numbers = set([220, 284])
+    while count < 10000:
+        if count in seen_numbers:
+            continue
+        sum_divisors = Tools.sum_divisors(count)
+        d_of_sum_divisors = Tools.sum_divisors(sum_divisors)
+        if count == d_of_sum_divisors:
+            sum_amicable_numbers += (count + d_of_sum_divisors)
+        seen_numbers.add(count)
+        seen_numbers.add(d_of_sum_divisors)
+        count += 1
+    return sum_amicable_numbers
