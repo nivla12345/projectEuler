@@ -516,17 +516,23 @@ def p20():
 # Sum all amicable numbers < 10000
 # Given function d(n) = m, where d is the sum of the divisors < n, d(m) == d(n) implies m and n are amicable numbers.
 def p21():
-    sum_amicable_numbers = 504
-    count = 2
-    seen_numbers = set([220, 284])
+    Tools.sum_amicable_numbers = 0
+    seen_amicable_numbers = set()
+    count = 1
     while count < 10000:
-        if count in seen_numbers:
+        if count in seen_amicable_numbers:
+            count += 1
             continue
-        sum_divisors = Tools.sum_divisors(count)
-        d_of_sum_divisors = Tools.sum_divisors(sum_divisors)
+        sum_of_divisors = Tools.sum_divisors(count)
+        d_of_sum_divisors = Tools.sum_divisors(sum_of_divisors)
         if count == d_of_sum_divisors:
-            sum_amicable_numbers += (count + d_of_sum_divisors)
-        seen_numbers.add(count)
-        seen_numbers.add(d_of_sum_divisors)
+            if count == sum_of_divisors:
+                count += 1
+                continue
+            else:
+                Tools.sum_amicable_numbers += (count + sum_of_divisors)
+                seen_amicable_numbers.add(count)
+                seen_amicable_numbers.add(sum_of_divisors)
         count += 1
-    return sum_amicable_numbers
+    return Tools.sum_amicable_numbers
+
