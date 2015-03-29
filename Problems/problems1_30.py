@@ -1,8 +1,8 @@
 __author__ = 'Alvin'
 import math
-
 import Tools
 
+## The problems that aren't in here were simple enough to do in the phython command line.
 
 def p1():
     m_sum = 0
@@ -536,3 +536,115 @@ def p21():
         count += 1
     return Tools.sum_amicable_numbers
 
+
+# Find the sum of all numbers < 28123 that are NOT the sum of 2 abundant numbers
+def p23():
+    """
+    My algorithm goes as follows.
+
+    1)
+    The number of abundant numbers is probably less than the numbers that are not abundant. Given this, my first step
+    was in finding all the abundant numbers (there were ~5k abundant numbers out of 28k numbers total verifying my
+    hypothesis).
+    2)
+    Then, I took every pair of abundant numbers that were less than the upper limit (28123) and threw them in a set to
+    maintain uniqueness. The numbers in this set then constituted all the numbers that could be constituted of abundant
+    numbers.
+    3)
+    At this point, all I had to do was sum the values in the set and subtract this from the net summation of 28123.
+
+    O(n,m,0) = n*root(n) + (m^2)/2 + o
+    n = 28123
+    m = ~5k, abundant numbers less than 28123
+    o = not too sure but the upper limit is 28123, its just the len(sum of pairs in abundant set)
+    """
+    const_upper_limit = 28123
+    # Gather all the abundant numbers
+    abundant_numbers = []
+    for i in xrange(1, const_upper_limit):
+        if Tools.sum_divisors(i) > i:
+            abundant_numbers.append(i)
+    sums = set()
+    # Gather the sum of all abundant pairs whose sum of pairs are less than 28123
+    for i in xrange(len(abundant_numbers)):
+        for j in xrange(i, len(abundant_numbers)):
+            abundant_sums = abundant_numbers[i] + abundant_numbers[j]
+            if abundant_sums > 28123:
+                break
+            sums.add(abundant_sums)
+    net_sum_of_possible_numbers = Tools.summation(const_upper_limit)
+    return net_sum_of_possible_numbers - sum(sums)
+
+
+# Return the millionth permutation of 9-0
+def p24():
+    """
+    My algorithm goes as follows:
+    1) Find the MSD (most significant digit). To find the MSD, let us examine permutations and how they work.
+       From taking a look at a few permutations, we can see a pattern beginning to emerge. That pattern takes this basic
+       form. Given n digits (in this problem n == 10), we know that the largest numbers will have a MSD of n - 1, the
+       next smallest group of numbers n - 2 and so on. What's key is that the size of each group is the same with that
+       size being: (n - 1)!. This number is actually quite intuitive given it is basically a reordering of the
+       definition of factorials.
+
+    2) Given this observation, we can search for the MSD in chunks of (n-1)!, the 2nd MSD in chunks of (n-2)! etc...
+
+    O(n) = c
+    c = 10 division operations or so
+    """
+    # To make this a generic solution, toggle these values around
+    permutation_length = 10
+    target_index = 999999
+    # The target index is out of range
+    if math.factorial(10) < target_index:
+        return -1
+    millionth_permutation = ""
+    digits = range(permutation_length)
+    n = len(digits)
+    while n > 0:
+        group_size = math.factorial(n-1)
+        index = target_index/group_size
+        digit = digits[index]
+        millionth_permutation += str(digit)
+        target_index -= (index * group_size)
+        digits.remove(digit)
+        n = len(digits)
+    return millionth_permutation
+
+
+# REturns the first fibonacci number with > 1000 digits
+def p25():
+    smallest_thousand_number = int("1" + "0"*999)
+    n = 2
+    fib_n = 1
+    fib_n_minus_1 = 1
+    while smallest_thousand_number >= fib_n:
+        tmp_fib_n_minus_1 = fib_n
+        fib_n += fib_n_minus_1
+        fib_n_minus_1 = tmp_fib_n_minus_1
+        n += 1
+    return n
+
+
+# Returns the cycle length of 1/d, if does not cycle returns 0
+def get_cycle_length(d):
+    # Assuming a max cycle of 1000
+    cycle_length = 0
+    iterations = 1000
+    while iterations > 0:
+        iterations -= 1
+    return cycle_length
+
+
+# Find the value d such that 1/d with the longest recurring cycle
+def p26():
+    d = 1
+    max_d = 1
+    max_cycle_length = 1
+    while d < 1000:
+        current_cycle_length = get_cycle_length(d)
+        if current_cycle_length > max_cycle_length:
+            max_cycle_length = current_cycle_length
+            max_d = d
+        d += 1
+    return max_d

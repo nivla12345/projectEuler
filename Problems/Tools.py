@@ -5,6 +5,7 @@ import math
 PHI = (1 + math.sqrt(5)) / 2
 
 
+# Only works up to n == 1474
 def fibonacci(n):
     """
     Takes the nth fibonacci.
@@ -16,7 +17,7 @@ def fibonacci(n):
     :param n: the number of fibonacci
     :return: nth fibonacci
     """
-    return round((PHI ** n) / (PHI + 2))
+    return int(round((PHI ** n) / (PHI + 2)))
 
 
 def is_prime(x):
@@ -86,6 +87,40 @@ def is_palindrome(n):
 def print_grid(grid):
     for i in grid:
         print i
+
+
+# Performs summation of positive integer n
+def summation(n):
+    if n <= 0:
+        return 0
+    if n & 1 == 0:
+        return (n + 1) * (n >> 1)
+    else:
+        return (n + 1) * (n >> 1) + (n >> 1) + 1
+
+
+# Returns a permutations lexicographic ordering
+def check_permutation(p):
+    count = len(p) - 1
+    sum_p = 0
+    digits = range(len(p))
+    for i in xrange(len(p)):
+        current_digit = int(p[i])
+        digit = digits[current_digit]
+        sum_p += digit * math.factorial(count)
+        for j in xrange(current_digit + 1, len(digits)):
+            digits[j] -= 1
+        count -= 1
+    return sum_p
+
+
+def num_base_ten_digits(n):
+    n = int(math.fabs(n))
+    num_digits = 0
+    while n > 0:
+        n /= 10
+        num_digits += 1
+    return num_digits
 
 
 # #######################################################################################################################
