@@ -629,8 +629,9 @@ def p25():
 # Returns the cycle length of 1/d, if does not cycle returns 0
 def get_cycle_length(d):
     # Assuming a max cycle of 1000
-    cycle_length = 0
     iterations = 1000
+    cycle_length = 0
+    num_digits_d = Tools.num_base_ten_digits(d)
     while iterations > 0:
         iterations -= 1
     return cycle_length
