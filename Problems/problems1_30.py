@@ -2,7 +2,7 @@ __author__ = 'Alvin'
 import math
 import Tools
 
-## The problems that aren't in here were simple enough to do in the phython command line.
+## The problems that aren't in here were simple enough to do in the python command line.
 
 def p1():
     m_sum = 0
@@ -627,14 +627,21 @@ def p25():
 
 
 # Returns the cycle length of 1/d, if does not cycle returns 0
-def get_cycle_length(d):
-    # Assuming a max cycle of 1000
-    iterations = 1000
-    cycle_length = 0
-    num_digits_d = Tools.num_base_ten_digits(d)
-    while iterations > 0:
-        iterations -= 1
-    return cycle_length
+def get_cycle_length(divisor):
+    count = 0
+    dividend_length = dict()
+    dividend = 1
+    # Perform division, if there is a repeat dividend division then we have a cycle
+    while dividend > 0:
+        if dividend < divisor:
+            dividend *= 10
+        else:
+            dividend = (dividend % divisor) * 10
+        if dividend in dividend_length:
+            return count - dividend_length[dividend]
+        dividend_length[dividend] = count
+        count += 1
+    return 0
 
 
 # Find the value d such that 1/d with the longest recurring cycle
