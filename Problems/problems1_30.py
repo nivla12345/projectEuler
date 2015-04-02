@@ -656,3 +656,28 @@ def p26():
             max_d = d
         d += 1
     return max_d
+
+
+# TODO p27()
+
+
+# Find the sum of the diagonal numbers of a 1001x1001 grid
+def p28():
+    current_val = 3
+    sum_vals = 1
+    add_by = 2
+    for i in xrange(500):
+        for j in xrange(4):
+            sum_vals += current_val + j*add_by
+        current_val += (add_by*3 + add_by + 2)
+        add_by += 2
+    return sum_vals
+
+
+# Find the number of unique powers for the equation a**b where a and b = [2:100]
+def p29():
+    vals = set()
+    for a in xrange(2,101):
+        for b in xrange(2,101):
+            vals.add(a**b)
+    return len(vals)
