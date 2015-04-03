@@ -640,9 +640,47 @@ def p26():
     return max_d
 
 
+def p27_prime_polynomial_length(a, b):
+    count = 0
+    while Tools.is_prime(Tools.nth_polynomial(count, 1, a, b)):
+        count += 1
+    return count
+
+
 # Find the product of a, b s.t. n^2 + a*n + b where consecutive values of n starting from 0 yield the most primes.
 def p27():
-    # Generate "a" values. Values for "a" must be odd
+    # Generate "a" values. Values for "a" must be odd (unless b is 2)
+    a_values = range(1, 1001, 2)
+    # Generate "b" values.
+    # Values for "b" must be prime because if we plug 0 into "n", we are left with "b". Hence, in
+    # order for the polynomial to be 0, b must be prime
+    b_values = []
+    for i in xrange(1000):
+        if Tools.is_prime(i):
+            b_values.append(i)
+    # Initialize vars
+    max_ab = 0
+    max_consecutive_ns = 0
+    # Iterate over a and b values
+    for a in a_values:
+        for b in b_values:
+            papb = p27_prime_polynomial_length(a, b)
+            if papb > max_consecutive_ns:
+                max_ab = a*b
+                max_consecutive_ns = papb
+            napb = p27_prime_polynomial_length(-a, b)
+            if napb > max_consecutive_ns:
+                max_ab = -a*b
+                max_consecutive_ns = napb
+            panb = p27_prime_polynomial_length(a, -b)
+            if panb > max_consecutive_ns:
+                max_ab = a*-b
+                max_consecutive_ns = panb
+            nanb = p27_prime_polynomial_length(-a, -b)
+            if nanb > max_consecutive_ns:
+                max_ab = a*b
+                max_consecutive_ns = nanb
+    return max_ab
 
 
 # Find the sum of the diagonal numbers of a 1001x1001 grid
@@ -665,3 +703,5 @@ def p29():
         for b in xrange(2,101):
             vals.add(a**b)
     return len(vals)
+
+

@@ -141,9 +141,17 @@ def get_cycle_length(divisor):
     return 0
 
 
-@contract()
+# Generic nth polynomial calculator, n is the value to plug into the polynomial and the variable args are the
+# coefficients of the polynomial. Example:
+# To calculate x^2 + 1 where x = 100
+# nth_polynomial(100, 1, 0 , 1)
 def nth_polynomial(n, *args):
-
+    sum_polynomial = 0
+    count = len(args) - 1
+    for i in args:
+        sum_polynomial += i * (n**count)
+        count -= 1
+    return sum_polynomial
 
 
 ########################################################################################################################
