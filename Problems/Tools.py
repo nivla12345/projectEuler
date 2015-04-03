@@ -123,7 +123,30 @@ def num_base_ten_digits(n):
     return num_digits
 
 
-# #######################################################################################################################
+# Returns the cycle length of 1/d, if does not cycle returns 0
+def get_cycle_length(divisor):
+    count = 0
+    dividend_length = dict()
+    dividend = 1
+    # Perform division, if there is a repeat dividend division then we have a cycle
+    while dividend > 0:
+        if dividend < divisor:
+            dividend *= 10
+        else:
+            dividend = (dividend % divisor) * 10
+        if dividend in dividend_length:
+            return count - dividend_length[dividend]
+        dividend_length[dividend] = count
+        count += 1
+    return 0
+
+
+@contract()
+def nth_polynomial(n, *args):
+
+
+
+########################################################################################################################
 # Date functions
 def is_leap_year(n):
     if n % 4 == 0:

@@ -626,33 +626,20 @@ def p25():
     return n
 
 
-# Returns the cycle length of 1/d, if does not cycle returns 0
-def get_cycle_length(divisor):
-    count = 0
-    dividend_length = dict()
-    dividend = 1
-    # Perform division, if there is a repeat dividend division then we have a cycle
-    while dividend > 0:
-        if dividend < divisor:
-            dividend *= 10
-        else:
-            dividend = (dividend % divisor) * 10
-        if dividend in dividend_length:
-            return count - dividend_length[dividend]
-        dividend_length[dividend] = count
-        count += 1
-    return 0
-
-
 # Find the value d such that 1/d with the longest recurring cycle
 def p26():
     d = 1
     max_d = 1
     max_cycle_length = 1
     while d < 1000:
-        current_cycle_length = get_cycle_length(d)
+        current_cycle_length = Tools.get_cycle_length(d)
         if current_cycle_length > max_cycle_length:
             max_cycle_length = current_cycle_length
             max_d = d
         d += 1
     return max_d
+
+
+# Find the product of a, b s.t. n^2 + a*n + b where consecutive values of n starting from 0 yield the most primes.
+def p27():
+    # Generate "a" values. Values for "a" must be odd
