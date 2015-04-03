@@ -631,31 +631,13 @@ def p25():
     return n
 
 
-# Returns the cycle length of 1/d, if does not cycle returns 0
-def get_cycle_length(divisor):
-    count = 0
-    dividend_length = dict()
-    dividend = 1
-    # Perform division, if there is a repeat dividend division then we have a cycle
-    while dividend > 0:
-        if dividend < divisor:
-            dividend *= 10
-        else:
-            dividend = (dividend % divisor) * 10
-        if dividend in dividend_length:
-            return count - dividend_length[dividend]
-        dividend_length[dividend] = count
-        count += 1
-    return 0
-
-
 # Find the value d such that 1/d with the longest recurring cycle
 def p26():
     d = 1
     max_d = 1
     max_cycle_length = 1
     while d < 1000:
-        current_cycle_length = get_cycle_length(d)
+        current_cycle_length = Tools.get_cycle_length(d)
         if current_cycle_length > max_cycle_length:
             max_cycle_length = current_cycle_length
             max_d = d
@@ -663,7 +645,47 @@ def p26():
     return max_d
 
 
-# TODO p27()
+def p27_prime_polynomial_length(a, b):
+    count = 0
+    while Tools.is_prime(Tools.nth_polynomial(count, 1, a, b)):
+        count += 1
+    return count
+
+
+# Find the product of a, b s.t. n^2 + a*n + b where consecutive values of n starting from 0 yield the most primes.
+def p27():
+    # Generate "a" values. Values for "a" must be odd (unless b is 2)
+    a_values = range(1, 1001, 2)
+    # Generate "b" values.
+    # Values for "b" must be prime because if we plug 0 into "n", we are left with "b". Hence, in
+    # order for the polynomial to be 0, b must be prime
+    b_values = []
+    for i in xrange(1000):
+        if Tools.is_prime(i):
+            b_values.append(i)
+    # Initialize vars
+    max_ab = 0
+    max_consecutive_ns = 0
+    # Iterate over a and b values
+    for a in a_values:
+        for b in b_values:
+            papb = p27_prime_polynomial_length(a, b)
+            if papb > max_consecutive_ns:
+                max_ab = a*b
+                max_consecutive_ns = papb
+            napb = p27_prime_polynomial_length(-a, b)
+            if napb > max_consecutive_ns:
+                max_ab = -a*b
+                max_consecutive_ns = napb
+            panb = p27_prime_polynomial_length(a, -b)
+            if panb > max_consecutive_ns:
+                max_ab = a*-b
+                max_consecutive_ns = panb
+            nanb = p27_prime_polynomial_length(-a, -b)
+            if nanb > max_consecutive_ns:
+                max_ab = a*b
+                max_consecutive_ns = nanb
+    return max_ab
 
 
 # Find the sum of the diagonal numbers of a 1001x1001 grid
@@ -686,3 +708,23 @@ def p29():
         for b in xrange(2,101):
             vals.add(a**b)
     return len(vals)
+
+
+# Checks whether the sum of the 5th power of the digits equal to n
+def p30_fifth_power_sum_digits(n):
+    n_copy = n
+    sum_fifth_power_digits = 0
+    while n > 0:
+        sum_fifth_power_digits += (n % 10)**5
+        n /= 10
+    return sum_fifth_power_digits == n_copy
+
+
+# Find all the numbers that can be written as the sum of 5th powers of their digits
+def p30():
+    qualifying_numbers_sum = 0
+    max_possible_value = 5*(9**5)
+    for i in xrange(10, max_possible_value):
+        if p30_fifth_power_sum_digits(i):
+            qualifying_numbers_sum += i
+    return qualifying_numbers_sum
