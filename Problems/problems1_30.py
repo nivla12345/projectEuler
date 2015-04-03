@@ -643,3 +643,25 @@ def p26():
 # Find the product of a, b s.t. n^2 + a*n + b where consecutive values of n starting from 0 yield the most primes.
 def p27():
     # Generate "a" values. Values for "a" must be odd
+
+
+# Find the sum of the diagonal numbers of a 1001x1001 grid
+def p28():
+    current_val = 3
+    sum_vals = 1
+    add_by = 2
+    for i in xrange(500):
+        for j in xrange(4):
+            sum_vals += current_val + j*add_by
+        current_val += (add_by*3 + add_by + 2)
+        add_by += 2
+    return sum_vals
+
+
+# Find the number of unique powers for the equation a**b where a and b = [2:100]
+def p29():
+    vals = set()
+    for a in xrange(2,101):
+        for b in xrange(2,101):
+            vals.add(a**b)
+    return len(vals)
