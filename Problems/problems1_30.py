@@ -705,3 +705,21 @@ def p29():
     return len(vals)
 
 
+# Checks whether the sum of the 5th power of the digits equal to n
+def p30_fifth_power_sum_digits(n):
+    n_copy = n
+    sum_fifth_power_digits = 0
+    while n > 0:
+        sum_fifth_power_digits += (n % 10)**5
+        n /= 10
+    return sum_fifth_power_digits == n_copy
+
+
+# Find all the numbers that can be written as the sum of 5th powers of their digits
+def p30():
+    qualifying_numbers_sum = 0
+    max_possible_value = 5*(9**5)
+    for i in xrange(10, max_possible_value):
+        if p30_fifth_power_sum_digits(i):
+            qualifying_numbers_sum += i
+    return qualifying_numbers_sum
