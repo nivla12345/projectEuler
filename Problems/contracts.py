@@ -1,6 +1,5 @@
 __author__ = 'not Alvin'
 
-
 import functools
 
 
@@ -23,6 +22,8 @@ def condition(pre_condition=None, post_condition=None):
             if post_condition is not None:
                 assert post_condition(return_value)
             return return_value
+
         return wrapper
+
     return decorator
 

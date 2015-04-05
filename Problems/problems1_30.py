@@ -1,18 +1,20 @@
 __author__ = 'Alvin'
 import math
+
 import Tools
 
-## The problems that aren't in here were simple enough to do in the python command line.
+
+# # The problems that aren't in here were simple enough to do in the python command line.
 
 # Find the sum of all multiples of 3 or 5 below 1000
 def p1():
     # Less than 1000 hence 999
     upper_limit = 999
     # Using the sum exclusion principle
-    sum_5_multiples = 5*Tools.summation(upper_limit/5)
-    sum_3_multiples = 3*Tools.summation(upper_limit/3)
+    sum_5_multiples = 5 * Tools.summation(upper_limit / 5)
+    sum_3_multiples = 3 * Tools.summation(upper_limit / 3)
     # 3 * 5 gets double counted
-    sum_15_multiples = 15*Tools.summation(upper_limit/15)
+    sum_15_multiples = 15 * Tools.summation(upper_limit / 15)
     return sum_5_multiples + sum_3_multiples - sum_15_multiples
 
 
@@ -111,7 +113,6 @@ def p8():
 05886116467109405077541002256983155200055935729725
 71636269561882670428252483600823257530420752963450
 """.replace("\n", "")
-    length = 1000
     product = 0
     for i in xrange(0, 987):
         number = NUMBER[i: i + 13]
@@ -123,19 +124,10 @@ def p8():
 
 
 def p8_sum13(x):
-    return int(x[0]) * \
-           int(x[1]) * \
-           int(x[2]) * \
-           int(x[3]) * \
-           int(x[4]) * \
-           int(x[5]) * \
-           int(x[6]) * \
-           int(x[7]) * \
-           int(x[8]) * \
-           int(x[9]) * \
-           int(x[10]) * \
-           int(x[11]) * \
-           int(x[12])
+    product = int(x[0])
+    for i in xrange(1, 13):
+        product *= int(x[i])
+    return product
 
 
 # Find a, b, and c s.t. a + b + c = 1000 where a^2 + b^2 = c^2
@@ -161,7 +153,7 @@ def p10():
 # Given a 20x20 grid, find the largest product of 4 in a row
 def p11():
     # Format grid
-    GRID = """08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
+    p11_grid = """08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00
 81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65
 52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91
@@ -181,7 +173,7 @@ def p11():
 20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"""
-    arr = GRID.split()
+    arr = p11_grid.split()
     grid_arr = []
     for i in xrange(20):
         tmp_arr = []
@@ -357,7 +349,7 @@ def p14():
     longest_length = 0
     largest_collatz_value = 0
     n = 1
-    while (n < 1000000):
+    while n < 1000000:
         n_collatz_length = collatz_length(n)
         if n_collatz_length > longest_length:
             longest_length = n_collatz_length
@@ -440,16 +432,16 @@ def p16():
         number_string = number_to_string[i]
         one_to_hundred += len(number_string)
     for i in xrange(20, 100, 10):
-        one_to_hundred += 10*len(number_to_string[i])
-    one_to_hundred += 8*one_through_nine
+        one_to_hundred += 10 * len(number_to_string[i])
+    one_to_hundred += 8 * one_through_nine
     print one_to_hundred
     # All the hundreds
-    letter_length += 10*one_to_hundred
-    letter_length += len("hundredand")*891
-    letter_length += len("hundred")*9
+    letter_length += 10 * one_to_hundred
+    letter_length += len("hundredand") * 891
+    letter_length += len("hundred") * 9
     # All the hundred numbers
     for i in xrange(1, 10, 1):
-        letter_length += 100*len(number_to_string[i])
+        letter_length += 100 * len(number_to_string[i])
     return letter_length
 
 
@@ -476,8 +468,8 @@ def p17():
         # Construct leftmost element
         new_optimized_line = [int(new_line[0]) + optimized_line[0]]
         # Construct optimized_line
-        for j in xrange(1, len(new_line)-1):
-            left = optimized_line[j-1] + int(new_line[j])
+        for j in xrange(1, len(new_line) - 1):
+            left = optimized_line[j - 1] + int(new_line[j])
             right = optimized_line[j] + int(new_line[j])
             new_optimized_line.append(max(left, right))
         new_optimized_line.append(int(new_line[-1]) + optimized_line[-1])
@@ -607,8 +599,8 @@ def p24():
     digits = range(permutation_length)
     n = len(digits)
     while n > 0:
-        group_size = math.factorial(n-1)
-        index = target_index/group_size
+        group_size = math.factorial(n - 1)
+        index = target_index / group_size
         digit = digits[index]
         millionth_permutation += str(digit)
         target_index -= (index * group_size)
@@ -619,7 +611,7 @@ def p24():
 
 # REturns the first fibonacci number with > 1000 digits
 def p25():
-    smallest_thousand_number = int("1" + "0"*999)
+    smallest_thousand_number = int("1" + "0" * 999)
     n = 2
     fib_n = 1
     fib_n_minus_1 = 1
@@ -673,19 +665,19 @@ def p27():
         for b in b_values:
             papb = p27_prime_polynomial_length(a, b)
             if papb > max_consecutive_ns:
-                max_ab = a*b
+                max_ab = a * b
                 max_consecutive_ns = papb
             napb = p27_prime_polynomial_length(-a, b)
             if napb > max_consecutive_ns:
-                max_ab = -a*b
+                max_ab = -a * b
                 max_consecutive_ns = napb
             panb = p27_prime_polynomial_length(a, -b)
             if panb > max_consecutive_ns:
-                max_ab = a*-b
+                max_ab = a * -b
                 max_consecutive_ns = panb
             nanb = p27_prime_polynomial_length(-a, -b)
             if nanb > max_consecutive_ns:
-                max_ab = a*b
+                max_ab = a * b
                 max_consecutive_ns = nanb
     return max_ab
 
@@ -697,19 +689,19 @@ def p28():
     add_by = 2
     for i in xrange(500):
         for j in xrange(4):
-            sum_vals += current_val + j*add_by
-        current_val += (add_by*3 + add_by + 2)
+            sum_vals += current_val + j * add_by
+        current_val += (add_by * 3 + add_by + 2)
         add_by += 2
     return sum_vals
 
 
 # Find the number of unique powers for the equation a**b where a and b = [2:100]
 def p29():
-    vals = set()
-    for a in xrange(2,101):
-        for b in xrange(2,101):
-            vals.add(a**b)
-    return len(vals)
+    values = set()
+    for a in xrange(2, 101):
+        for b in xrange(2, 101):
+            values.add(a ** b)
+    return len(values)
 
 
 # Checks whether the sum of the 5th power of the digits equal to n
@@ -717,7 +709,7 @@ def p30_fifth_power_sum_digits(n):
     n_copy = n
     sum_fifth_power_digits = 0
     while n > 0:
-        sum_fifth_power_digits += (n % 10)**5
+        sum_fifth_power_digits += (n % 10) ** 5
         n /= 10
     return sum_fifth_power_digits == n_copy
 
@@ -725,7 +717,7 @@ def p30_fifth_power_sum_digits(n):
 # Find all the numbers that can be written as the sum of 5th powers of their digits
 def p30():
     qualifying_numbers_sum = 0
-    max_possible_value = 5*(9**5)
+    max_possible_value = 5 * (9 ** 5)
     for i in xrange(10, max_possible_value):
         if p30_fifth_power_sum_digits(i):
             qualifying_numbers_sum += i

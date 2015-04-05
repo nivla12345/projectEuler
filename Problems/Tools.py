@@ -1,6 +1,7 @@
 __author__ = 'Alvin'
 
 import math
+
 from contracts import pre_condition
 from contracts import post_condition
 from memoize import Memoize
@@ -156,7 +157,7 @@ def nth_polynomial(n, *args):
     sum_polynomial = 0
     count = len(args) - 1
     for i in args:
-        sum_polynomial += i * (n**count)
+        sum_polynomial += i * (n ** count)
         count -= 1
     return sum_polynomial
 
@@ -187,7 +188,7 @@ def generic_ways_to_make_target(target, args):
 generic_ways_to_make_target = Memoize(generic_ways_to_make_target)
 
 
-########################################################################################################################
+# #######################################################################################################################
 # Date functions
 def is_leap_year(n):
     if n % 4 == 0:
