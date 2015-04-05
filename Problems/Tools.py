@@ -1,6 +1,10 @@
 __author__ = 'Alvin'
 
 import math
+from contracts import pre_condition
+from contracts import post_condition
+from memoize import Memoize
+
 
 PHI = (1 + math.sqrt(5)) / 2
 
@@ -114,8 +118,11 @@ def check_permutation(p):
     return sum_p
 
 
+# Counts the number of digits in a base 10 number.
 def num_base_ten_digits(n):
     n = int(math.fabs(n))
+    if n == 0:
+        return 1
     num_digits = 0
     while n > 0:
         n /= 10
@@ -154,6 +161,32 @@ def nth_polynomial(n, *args):
     return sum_polynomial
 
 
+# Attempt at providing a generic solution to the how many ways can I make a dollar with X coins
+# @param target refers to the amount that the arg coefficients are supposed to reach up to. ie. a dollar would be 100
+# @param args is a generic value of coins. ie. a nickel would be 5 and a dollar coin would be 100. args must be sorted
+@pre_condition(lambda target, args: target >= 0 and type(args) is tuple)
+@post_condition(lambda ret: ret >= 0)
+def generic_ways_to_make_target(target, args):
+    if target == 0:
+        return 1
+    if len(args) == 0:
+        return 0
+    current_coin_value = args[0]
+    # The current coin is larger than the target this means we should move on to the smaller coin
+    if current_coin_value > target:
+        return generic_ways_to_make_target(target, args[1:])
+    if len(args) == 1:
+        return target % current_coin_value == 0
+    seen_values = 0
+    while target >= 0:
+        seen_values += generic_ways_to_make_target(target, args[1:])
+        target -= current_coin_value
+    return seen_values
+
+
+generic_ways_to_make_target = Memoize(generic_ways_to_make_target)
+
+
 ########################################################################################################################
 # Date functions
 def is_leap_year(n):
@@ -188,66 +221,3 @@ def days_in_month(month, year):
     if is_leap_year(year) and month == 2:
         return 29
     return NORMAL_DAYS_IN_MONTH[month]
-
-"""
-# Returns what day of the week a given date was
-# 0: monday, 1: tuesday, etc...
-def date_to_day_of_week(day, month, year):
-    # 1/1/1901 == Tuesday (1)
-    # Everything will be done with respect to 1/1/1901
-    before_or_after = before_after_or_equal(1, 1, 1901)
-    if before_or_after == 1:
-        # Find the number of days from day, month, year to 1/1/1901
-        num_days_apart = days_apart(1, 1, 1901, day, month, year, True)
-        return (1 + (num_days_apart % 7)) % 7
-    elif before_or_after == -1:
-        # Find the number of days from day, month, year to 1/1/1901
-        num_days_apart = days_apart(1, 1, 1901, day, month, year, False)
-        return (1 - (num_days_apart % 7)) % 7
-    else:
-        return 1
-
-
-# Number of days 2 dates are apart
-def days_apart(day0, month0, year0, day1, month1, year1, ba):
-    # After
-    if ba:
-        years_apart = year0 - year1
-        num_leap_years = num_leap_years_in_range(year0, year1)
-    # Before
-    else:
-        years_apart = year1 - year0
-        num_leap_years = num_leap_years_in_range(year1, year0)
-    return (years_apart - num_leap_years) * 365 + num_leap_years * 364
-
-
-# Returns the number of leap years in between a range
-def num_leap_years_in_range(year0, year1):
-    diff = (year1 % 400) - (year0 % 400)
-    if diff <= 3:
-        if is_leap_year(year0):
-            return 1
-
-
-# Year0 ? Year1
-# After  == ? returns  1
-# Equals == ? returns  0
-# Before == ? returns -1
-def before_after_or_equal(day0, month0, year0, day1, month1, year1):
-    if year0 > year1:
-        return 1
-    elif year0 < year1:
-        return -1
-    else:
-        if month0 > month1:
-            return 1
-        elif month0 < month1:
-            return -1
-        else:
-            if day0 > day1:
-                return 1
-            elif day0 < day1:
-                return -1
-            else:
-                return 0
-"""

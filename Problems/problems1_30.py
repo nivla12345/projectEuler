@@ -628,15 +628,17 @@ def p25():
 
 # Find the value d such that 1/d with the longest recurring cycle
 def p26():
-    d = 1
-    max_d = 1
+    d = 999
+    max_d = 999
     max_cycle_length = 1
-    while d < 1000:
+    while d > 0:
         current_cycle_length = Tools.get_cycle_length(d)
         if current_cycle_length > max_cycle_length:
             max_cycle_length = current_cycle_length
             max_d = d
-        d += 1
+        if max_cycle_length > d:
+            return max_d
+        d -= 1
     return max_d
 
 
