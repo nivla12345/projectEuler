@@ -4,14 +4,19 @@ import Tools
 
 ## The problems that aren't in here were simple enough to do in the python command line.
 
+# Find the sum of all multiples of 3 or 5 below 1000
 def p1():
-    m_sum = 0
-    for i in xrange(1000):
-        if i % 5 == 0 or i % 3 == 0:
-            m_sum += i
-    return m_sum
+    # Less than 1000 hence 999
+    upper_limit = 999
+    # Using the sum exclusion principle
+    sum_5_multiples = 5*Tools.summation(upper_limit/5)
+    sum_3_multiples = 3*Tools.summation(upper_limit/3)
+    # 3 * 5 gets double counted
+    sum_15_multiples = 15*Tools.summation(upper_limit/15)
+    return sum_5_multiples + sum_3_multiples - sum_15_multiples
 
 
+# Sum all even fibonnacis below 4M
 def p2():
     fib_sum = 0
     count = 3
