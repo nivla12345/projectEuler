@@ -9,8 +9,20 @@ import math
 # 200, 100, 50, 20, 10, 5, 2, 1
 # M = c0*x0 + c1*x1 + c2*x2 ....
 # I have just written a generic solution for this problem
+# def p31():
+#     return Tools.generic_ways_to_make_target(200, (200, 100, 50, 20, 10, 5, 2, 1))
+#
+# Attempt #2 at solving using dynamic programming
 def p31():
-    return Tools.generic_ways_to_make_target(200, (200, 100, 50, 20, 10, 5, 2, 1))
+    options = (1, 2, 5, 10, 20, 50, 100, 200)
+    target_value = 200
+    results = [0] * (target_value + 1)
+    results[0] = 1
+    for coin in options:
+        for i in xrange(coin, target_value + 1):
+            results[i] += results[i - coin]
+    print results
+    return results[target_value]
 
 
 product_set = set()
