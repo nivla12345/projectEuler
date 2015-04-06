@@ -208,6 +208,23 @@ def reduce_fraction(numerator, denominator):
         gcd = euclid_gcd(numerator, denominator)
     return numerator, denominator
 
+permutation_sum_of_digits_factorials = []
+for i in xrange(10):
+    permutation_sum_of_digits_factorials.append(math.factorial(i))
+
+
+@pre_condition(lambda n: type(n) is int)
+@post_condition(lambda ret: type(ret) is int and ret > 0)
+def permutation_sum_of_digits(n):
+    if n == 0:
+        return 1
+    n = abs(n)
+    sum_factorial_digits = 0
+    while n > 0:
+        sum_factorial_digits += permutation_sum_of_digits_factorials[n % 10]
+        n /= 10
+    return sum_factorial_digits
+
 
 # #######################################################################################################################
 # Date functions

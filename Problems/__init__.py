@@ -7,7 +7,7 @@ import problems31_60
 
 
 t0 = time.time()
-print problems31_60.p33()
+print problems31_60.p34()
 t1 = time.time()
 
 print "time (s): ", t1 - t0

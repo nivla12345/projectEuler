@@ -78,4 +78,8 @@ def p33():
 def p34():
     # This value is 7 digits meaning that any further values will cannot mathematically reach that value
     maximum_possible_number = 7*math.factorial(9)
-    return
+    sum_of_qualifying_numbers = 0
+    for i in xrange(10, maximum_possible_number):
+        if Tools.permutation_sum_of_digits(i) == i:
+            sum_of_qualifying_numbers += i
+    return sum_of_qualifying_numbers
