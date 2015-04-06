@@ -83,3 +83,34 @@ def p34():
         if Tools.permutation_sum_of_digits(i) == i:
             sum_of_qualifying_numbers += i
     return sum_of_qualifying_numbers
+
+
+# If these digits are contained in the number, the value cannot be prime
+is_n_cycle_prime_set = set((2, 4, 5, 6, 8))
+
+
+def is_n_cycle_prime(n):
+#    num_digits = Tools.num_base_ten_digits(n)
+    current_string = str(n)
+    if len(current_string) == 1:
+        return Tools.is_prime(n)
+    current_number = int(current_string)
+    for i in current_string:
+        if int(i) in is_n_cycle_prime_set:
+            return False
+    for i in xrange(len(current_string)):
+        if current_number % 10 in is_n_cycle_prime_set or not Tools.is_prime(current_number):
+            return False
+        current_string = current_string[1:] + current_string[0]
+        current_number = int(current_string)
+    return True
+
+
+# Count the number of primes under 1,000,000 whose entire cycle is prime
+def p35():
+    number_of_cycle_primes = 0
+    for i in xrange(1, 10):
+        number_of_cycle_primes += is_n_cycle_prime(i)
+    for i in xrange(11, 1000000, 2):
+        number_of_cycle_primes += is_n_cycle_prime(i)
+    return number_of_cycle_primes
