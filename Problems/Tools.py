@@ -208,9 +208,8 @@ def reduce_fraction(numerator, denominator):
         gcd = euclid_gcd(numerator, denominator)
     return numerator, denominator
 
-permutation_sum_of_digits_factorials = []
-for i in xrange(10):
-    permutation_sum_of_digits_factorials.append(math.factorial(i))
+
+permutation_sum_of_digits_factorials = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880]
 
 
 @pre_condition(lambda n: type(n) is int)
@@ -224,6 +223,24 @@ def permutation_sum_of_digits(n):
         sum_factorial_digits += permutation_sum_of_digits_factorials[n % 10]
         n /= 10
     return sum_factorial_digits
+
+
+# Rotates to the right
+def rotate_number(n, num_digits):
+    digit_to_move = n % 10
+    n /= 10
+    n += digit_to_move * pow(10, num_digits-1)
+    return n
+
+
+@pre_condition(lambda n: type(n) is int and n >= 10)
+def is_n_cycle_prime(n):
+    num_digits = num_base_ten_digits(n)
+    for i in xrange(num_digits):
+        if not is_prime(n):
+            return False
+        n = rotate_number(n, num_digits)
+    return True
 
 
 # #######################################################################################################################
