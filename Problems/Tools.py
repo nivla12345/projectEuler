@@ -188,6 +188,27 @@ def generic_ways_to_make_target(target, args):
 generic_ways_to_make_target = Memoize(generic_ways_to_make_target)
 
 
+# Performs Euclid's greatest common divisor problem
+def euclid_gcd(a, b):
+    while b != 0:
+        temp = b
+        b = a % b
+        a = temp
+    return a
+
+
+# Reduces a fraction to the lowest terms
+@pre_condition(lambda numerator, denominator: type(numerator) is int and type(denominator) is int and denominator != 0)
+@post_condition(lambda ret: type(ret) is tuple and len(ret) == 2)
+def reduce_fraction(numerator, denominator):
+    gcd = euclid_gcd(numerator, denominator)
+    while gcd > 1:
+        numerator /= abs(gcd)
+        denominator /= abs(gcd)
+        gcd = euclid_gcd(numerator, denominator)
+    return numerator, denominator
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):

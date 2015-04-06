@@ -366,18 +366,18 @@ def collatz_length(n):
     while n != 1:
         length += 1
         if n in collatz_lengths:
-            # TODO: Iterate through temp_collatz_lengths and add to collatz_lengths
+            # Iterate through temp_collatz_lengths and add to collatz_lengths
             for i in temp_collatz_lengths:
                 collatz_lengths[i] = length - temp_collatz_lengths[i]
             collatz_lengths[original_n] = length
             return length + collatz_lengths[n]
-        # TODO: Add to temp_collatz_lengths
+        # Add to temp_collatz_lengths
         temp_collatz_lengths[n] = length
         if n % 2 == 0:
             n /= 2
         else:
             n = 3 * n + 1
-    # TODO: Iterate through temp_collatz_lengths and add to collatz_lengths
+    # Iterate through temp_collatz_lengths and add to collatz_lengths
     for i in temp_collatz_lengths:
         collatz_lengths[i] = length - temp_collatz_lengths[i]
     # Deposit into dictionary
