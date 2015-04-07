@@ -243,6 +243,28 @@ def is_n_cycle_prime(n):
     return True
 
 
+# Generate all palindromes n digits long in order of size
+@pre_condition(lambda n: type(n) is int and n >= 1)
+def generate_palindromes(n):
+    if n == 1:
+        return range(1, 10)
+    even = n % 2
+    iter_length = n/2
+    starting_point = pow(10, iter_length-1)
+    end_point = pow(10, iter_length)
+    palindromes = range(starting_point, end_point)
+    if not even:
+        for i in xrange(len(palindromes)):
+            palindromes[i] = int(str(palindromes[i]) + str(palindromes[i])[::-1])
+        return palindromes
+    else:
+        odd_digits_palindromes = []
+        for i in xrange(len(palindromes)):
+            for j in xrange(10):
+                odd_digits_palindromes.append(int(str(palindromes[i]) + str(j) + str(palindromes[i])[::-1]))
+        return odd_digits_palindromes
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):

@@ -109,3 +109,12 @@ def p35():
     return number_of_cycle_primes
 
 
+def p36():
+    sum_binary_and_decimal = 0
+    for i in xrange(1, 7):
+        palindromes = Tools.generate_palindromes(i)
+        for p in palindromes:
+            binary_p = bin(p)[2:]
+            if binary_p == binary_p[::-1]:
+                sum_binary_and_decimal += p
+    return sum_binary_and_decimal
