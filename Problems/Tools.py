@@ -1,6 +1,7 @@
 __author__ = 'Alvin'
 
 import math
+import string
 
 from contracts import pre_condition
 from contracts import post_condition
@@ -8,6 +9,7 @@ from memoize import Memoize
 
 
 PHI = (1 + math.sqrt(5)) / 2
+ALL_DIGITS = string.digits + string.letters
 
 
 # Only works up to n == 1474
@@ -263,6 +265,59 @@ def generate_palindromes(n):
             for j in xrange(10):
                 odd_digits_palindromes.append(int(str(palindromes[i]) + str(j) + str(palindromes[i])[::-1]))
         return odd_digits_palindromes
+
+
+# Converts a base 10 value x to the corresponding base
+# Modified from a post on stack overflow
+def int2base(x, base, digit_choices=ALL_DIGITS):
+    if x < 0: sign = -1
+    elif x == 0: return digit_choices[0]
+    else: sign = 1
+    x *= sign
+    digits = []
+    while x:
+        digits.append(digit_choices[x % base])
+        x /= base
+    if sign < 0:
+        digits.append('-')
+    digits.reverse()
+    return ''.join(digits)
+
+
+# Prepends "0's" to the MSB position of the number.
+# digits - the number of digits to display ie. the number of bits the specified value is
+def int2base_disp_zeroes(x, base, digits, digit_choices=ALL_DIGITS):
+    based_number = int2base(x, base, digit_choices)
+    digit_length_difference = digits - len(based_number)
+    if digit_length_difference > 0:
+        return digit_length_difference*digit_choices[0] + based_number
+    elif digit_length_difference < 0:
+        return based_number[0:digits]
+    else:
+        return based_number
+        
+
+
+def is_truncatable_prime(n):
+    n = abs(n)
+    if n < 10:
+        return False
+    otherside_truncate = n
+    while n > 0:
+        if not is_prime(n):
+            return False
+        if not is_prime(otherside_truncate):
+            return False
+        otherside_truncate = reverse_int(reverse_int(n)/10)
+        n /= 10
+    return True
+
+
+def reverse_int(n):
+    sign = 1
+    if n < 0:
+        sign = -1
+    return sign*int((str(n)[::-1]))
 
 
 # #######################################################################################################################
