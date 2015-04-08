@@ -136,27 +136,29 @@ truncatable_prime_set = set()
 
 
 def p37():
-    count_truncatable_numbers = 0
-    sum_truncatable_numbers = 0
-    count = 13
-    while count_truncatable_numbers < 11:
+    count = 0
+    num_truncatable_primes = 0
+    sum_truncatable_primes = 0
+    while num_truncatable_primes < 11:
         if Tools.is_truncatable_prime(count):
-            sum_truncatable_numbers += count
-            count_truncatable_numbers += 1
+            sum_truncatable_primes += count
+            num_truncatable_primes += 1
             truncatable_prime_set.add(count)
         count += 1
-    return sum_truncatable_numbers
-    """
+    return sum_truncatable_primes
+
+"""
     # These are the only digits that can compose a truncatable prime
-    viable_digits = "379"
+    viable_digits = "23579"
+    base = len(viable_digits)
     current_digit_length = 2
     while True:
-        num_iterations = pow(3, current_digit_length)
+        num_iterations = pow(base, current_digit_length)
         for i in xrange(num_iterations):
-            base_3_number = int(Tools.int2base_disp_zeroes(i, 3, current_digit_length, "379"))
+            base_3_number = int(Tools.int2base_disp_zeroes(i, base, current_digit_length, viable_digits))
             if Tools.is_truncatable_prime(base_3_number):
                 truncatable_prime_set.add(base_3_number)
         if len(truncatable_prime_set) >= 11:            
             return sum(truncatable_prime_set)
         current_digit_length += 1
-    """
+"""

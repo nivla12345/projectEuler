@@ -10,6 +10,7 @@ from memoize import Memoize
 
 PHI = (1 + math.sqrt(5)) / 2
 ALL_DIGITS = string.digits + string.letters
+PRIMES = set()
 
 
 # Only works up to n == 1474
@@ -28,6 +29,8 @@ def fibonacci(n):
 
 
 def is_prime(x):
+    if x in PRIMES:
+        return True
     if x <= 1:
         return False
     if x <= 3:
@@ -38,6 +41,7 @@ def is_prime(x):
     for i in xrange(3, root + 1, 2):
         if x % i == 0:
             return False
+    PRIMES.add(x)
     return True
 
 
@@ -295,7 +299,6 @@ def int2base_disp_zeroes(x, base, digits, digit_choices=ALL_DIGITS):
         return based_number[0:digits]
     else:
         return based_number
-        
 
 
 def is_truncatable_prime(n):
@@ -308,7 +311,7 @@ def is_truncatable_prime(n):
             return False
         if not is_prime(otherside_truncate):
             return False
-        otherside_truncate = reverse_int(reverse_int(n)/10)
+        otherside_truncate = reverse_int(reverse_int(otherside_truncate)/10)
         n /= 10
     return True
 
