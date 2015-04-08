@@ -135,8 +135,13 @@ def p36():
 truncatable_prime_set = set()
 
 
+# Find the sume of all 11 truncatable sums. My solution currently is quite slow (1.04 seconds).
+# One method to speed things up:
+# The MSD must be one of the following: 2, 3, 5, 7
+# The LSD must be one of the following: 3, 7 (Done with the incrementing)
+# The middle digits must be:  1, 3, 7, 9
 def p37():
-    count = 0
+    count = 13
     num_truncatable_primes = 0
     sum_truncatable_primes = 0
     while num_truncatable_primes < 11:
@@ -144,21 +149,24 @@ def p37():
             sum_truncatable_primes += count
             num_truncatable_primes += 1
             truncatable_prime_set.add(count)
-        count += 1
+        lsd = count % 10
+        if lsd == 3:
+            count += 4
+        else:
+            count += 6
     return sum_truncatable_primes
 
-"""
-    # These are the only digits that can compose a truncatable prime
-    viable_digits = "23579"
-    base = len(viable_digits)
-    current_digit_length = 2
-    while True:
-        num_iterations = pow(base, current_digit_length)
-        for i in xrange(num_iterations):
-            base_3_number = int(Tools.int2base_disp_zeroes(i, base, current_digit_length, viable_digits))
-            if Tools.is_truncatable_prime(base_3_number):
-                truncatable_prime_set.add(base_3_number)
-        if len(truncatable_prime_set) >= 11:            
-            return sum(truncatable_prime_set)
-        current_digit_length += 1
-"""
+
+# Find the largest concatenated pandigital number formed by n * (1, 2, 3...)
+# My strategy is as follows (Its kind of cheating). The problem example gave an example of n = 9 and the resulting
+# pandigital number was 918273645. I tested this number and its not the answer meaning that n's MSD must begin with 9.
+# This means that I can eliminate 90% of the tests who's MSD are not 9.
+def p38():
+    # Number of digits for n
+    for i in xrange(6, 2, -1):
+        start_point = pow(10, i) - 1
+        end_point = pow(10, i-1)*9
+        for n in xrange(start_point, end_point, -1):
+            pandigital = Tools.make_pandigital(n)
+            if Tools.is_pandigital(pandigital):
+                return pandigital

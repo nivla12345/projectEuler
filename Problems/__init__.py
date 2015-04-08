@@ -11,10 +11,10 @@ constant_iterations = 1
 
 t0 = time.time()
 if constant_iterations == 1:
-    print problems31_60.p36()
+    print problems31_60.p38()
 else:
     for i in xrange(constant_iterations):
-        problems31_60.p36()
+        problems31_60.p37()
 t1 = time.time()
 
 print "time (s): ", t1 - t0

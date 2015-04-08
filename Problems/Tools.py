@@ -301,11 +301,18 @@ def int2base_disp_zeroes(x, base, digits, digit_choices=ALL_DIGITS):
         return based_number
 
 
+is_truncatable_prime_allowable_msd = set([2, 3, 5, 7])
+
+
 def is_truncatable_prime(n):
     n = abs(n)
     if n < 10:
         return False
     otherside_truncate = n
+    if not is_prime(n):
+        return False
+    otherside_truncate = reverse_int(reverse_int(otherside_truncate)/10)
+    n /= 10
     while n > 0:
         if not is_prime(n):
             return False
@@ -321,6 +328,26 @@ def reverse_int(n):
     if n < 0:
         sign = -1
     return sign*int((str(n)[::-1]))
+
+
+is_pandigital_constant_set = set(['1', '3', '2', '5', '4', '7', '6', '9', '8'])
+
+
+# Returns whetehr a number is 1 through 9 pandigital
+def is_pandigital(n):
+    str_n = str(n)
+    if len(str_n) != 9:
+        return False
+    return set(str_n) == is_pandigital_constant_set
+
+
+def make_pandigital(n):
+    pandigital_value = ""
+    count = 1
+    while len(pandigital_value) < 9:
+        pandigital_value += str(count*n)
+        count += 1
+    return int(pandigital_value)
 
 
 # #######################################################################################################################
