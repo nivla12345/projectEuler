@@ -1,6 +1,7 @@
 __author__ = 'Alvin'
 import Tools
 import math
+import string
 from memoize import Memoize
 # The problems that aren't in here were simple enough to do in the python command line.
 
@@ -241,7 +242,57 @@ def p42():
         word = word.strip('"').lower()
         num_triangle_words += Tools.get_alphabetic_value_of_word(word) in tri_numbers
     return num_triangle_words
-            
-        
 
-        
+seen_p43 = set()
+
+
+# Takes a string n that represents the pandigital number to check
+def matches_p43_requirement(n):
+    d234  = int(n[1:4]) % 2
+    d345  = int(n[2:5]) % 3
+    d456  = int(n[3:6]) % 5
+    d567  = int(n[4:7]) % 7
+    d678  = int(n[5:8]) % 11
+    d789  = int(n[6:9]) % 13
+    d8910 = int(n[7:])  % 17
+    return (d234 + d345 + d456 + d567 + d678 + d789 + d8910) == 0
+
+
+# Returns the valid choices for a given digit place
+def p43_get_valid_digits(n):
+    if n == 0:
+        return string.digits[1:]
+    if n == 3:
+        return "02468"
+    if n == 5:
+        return "05"
+    return string.digits
+
+
+def p43_make_valid_pandigital_numbers(pandigital_number="", digits_left=string.digits):
+    pan_len = len(pandigital_number)
+    if pan_len == 10:
+        if matches_p43_requirement(pandigital_number):
+            seen_p43.add(pandigital_number)
+            return pandigital_number
+        return 0
+    sum_of_matching = 0
+#    valid_digits = p43_get_valid_digits(pan_len)
+    for i in xrange(len(digits_left)):
+        sum_of_matching += int(p43_make_valid_pandigital_numbers(
+            pandigital_number + digits_left[i],
+            digits_left[0:i] + digits_left[i+1:]))
+    return sum_of_matching
+
+
+# Find the sum of all pandigital numbers whos 3 digit products are divisible by primes.
+# d2d3d4  % 2,  d4  0,2,4,6,8
+# d3d4d5  % 3,  d5  anything
+# d4d5d6  % 5,  d6  0, 5
+# d5d6d7  % 7,  d7  anything
+# d6d7d8  % 11, d8  anything
+# d7d8d9  % 13, d9  anything
+# d8d9d10 % 17, d10 anything
+# Additionally, d1 != 0
+def p43():
+    return p43_make_valid_pandigital_numbers()
