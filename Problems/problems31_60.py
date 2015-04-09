@@ -170,3 +170,46 @@ def p38():
             pandigital = Tools.make_pandigital(n)
             if Tools.is_pandigital(pandigital):
                 return pandigital
+
+
+# Find the perimeter of a right triangle that yields the most pythagorian triplets.
+# The algorithm here is to generate only pythagorian triplets. I do so by using Euclid's algorithm where:
+#   a = k * (m**2 - n**2)
+#   b = k * (2*m*n)
+#   c = m**2 + n**2
+# The conditions being:
+#   m > n
+#   m and n must be coprime
+#   m - n is odd
+#   k can be any integer
+# See: https://en.wikipedia.org/wiki/Pythagorean_triple
+# Instead of using a hashtable, I just used an array that used the index as a key. This takes up more space but given we
+# have a finite number of perfect squares being 1001 this was affordable.
+def p39():
+    num_perfect_square = [0]*1001
+    # This bound was derived given m = 31 would yield an a + b + c > 1000
+    for m in xrange(2, 32):
+        # Iterating up to m satisfies the m > n condition
+        m_minus_n_odd = m % 2
+        for n in xrange(1 + m_minus_n_odd % 2, m, 2):
+            if Tools.euclid_gcd(m, n) != 1:
+                continue
+            a = m*m - n*n
+            b = 2*m*n
+            c = m*m + n*n
+            perimeter = a + b + c
+            if perimeter > 1000:
+                continue
+            num_perfect_square[perimeter] += 1
+            k = 2
+            perimeter_copy = perimeter*k
+            while perimeter_copy < 1000:
+                num_perfect_square[perimeter_copy] += 1
+                k += 1
+                perimeter_copy = perimeter*k
+    return num_perfect_square.index(max(num_perfect_square))
+
+
+# Given a decimal consisting of concatenating consecutive decimal values, find d1*d10*...*d1000000
+# Extremely lazy method... of brutally constructing the string
+def p40():
