@@ -223,6 +223,25 @@ def p40():
 
 # Find the number of words that form triangle numbers
 def p42():
-    with open('p042_words.txt', 'r'):
-        for line in p042_words:
-            print line
+    words = []
+    num_triangle_words = 0
+    with open('p042_words.txt', 'r') as f:
+        for line in f:
+            words = line.split(',')
+            break
+    # Its unlikely that words will be larger than this value
+    triange_numbers_to_generate = 1000
+    tri_numbers = set()
+    # Generate triangle numbers
+    for i in xrange(1, triange_numbers_to_generate):
+        tri_numbers.add(Tools.summation(i))
+    Tools.generate_letters_2_numbers()
+    # Iterate over words
+    for word in words:
+        word = word.strip('"').lower()
+        num_triangle_words += Tools.get_alphabetic_value_of_word(word) in tri_numbers
+    return num_triangle_words
+            
+        
+
+        
