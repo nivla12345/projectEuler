@@ -213,3 +213,9 @@ def p39():
 # Given a decimal consisting of concatenating consecutive decimal values, find d1*d10*...*d1000000
 # Extremely lazy method... of brutally constructing the string
 def p40():
+    d = "."
+    count = 1
+    while len(d) < 1000001:
+        d = d + str(count)
+        count += 1
+    return int(d[1])*int(d[10])*int(d[100])*int(d[1000])*int(d[10000])*int(d[100000])*int(d[1000000])

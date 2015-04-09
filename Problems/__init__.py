@@ -6,12 +6,12 @@ import problems1_30
 import problems31_60
 
 
-constant_iterations = 100
+constant_iterations = 1
 
 
 t0 = time.time()
 if constant_iterations == 1:
-    print problems31_60.p39()
+    print problems31_60.p40()
 else:
     for i in xrange(constant_iterations):
         problems31_60.p39()
