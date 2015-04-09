@@ -219,3 +219,10 @@ def p40():
         d = d + str(count)
         count += 1
     return int(d[1])*int(d[10])*int(d[100])*int(d[1000])*int(d[10000])*int(d[100000])*int(d[1000000])
+
+
+# Find the number of words that form triangle numbers
+def p42():
+    with open('p042_words.txt', 'r'):
+        for line in p042_words:
+            print line
