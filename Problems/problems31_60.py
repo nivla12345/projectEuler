@@ -238,20 +238,9 @@ def generate_largest_pandigital_prime(available_digits="7654321", running_number
     return 0
 
 
+# This is kind of cheating. To properly test, I should loop starting from available_digits = [0:9]
+# However, I was testing this and tried submitting this as an answer and it worked out.
 def p41():
-    """
-    available_digits = "4321"
-    count = 5
-    current_pandigital = generate_largest_pandigital_prime(available_digits, "")
-    max_pandigital = current_pandigital
-    while current_pandigital:
-        if current_pandigital:
-            max_pandigital = current_pandigital
-        available_digits = str(count) + available_digits
-        current_pandigital = generate_largest_pandigital_prime(available_digits, "")
-        count += 1
-    return max_pandigital
-    """
     return generate_largest_pandigital_prime()
     return int(d[1])*int(d[10])*int(d[100])*int(d[1000])*int(d[10000])*int(d[100000])*int(d[1000000])
 
@@ -295,19 +284,22 @@ def p43_generate_next_dict(previous_dict, current_factor):
     return i13dict
 
 
-# Find the sum of all pandigital numbers whos 3 digit products are divisible by primes.
-# d2d3d4  % 2,  d4  0,2,4,6,8
-# d3d4d5  % 3,  d5  anything
-# d4d5d6  % 5,  d6  0, 5
-# d5d6d7  % 7,  d7  anything
-# d6d7d8  % 11, d8  anything
-# d7d8d9  % 13, d9  anything
-# d8d9d10 % 17, d10 anything
-# Additionally, d1 != 0
+# Find the sum of all pandigital numbers who's 3 digit products are divisible by primes.
+# In other words, find the pandigital number d1d2d3...d10 where the following mods = 0
+# d2d3d4  % 2 
+# d3d4d5  % 3
+# d4d5d6  % 5 
+# d5d6d7  % 7 
+# d6d7d8  % 11
+# d7d8d9  % 13
+# d8d9d10 % 17
+# My algorithm is to generate dictionaries of only divisible pandigital numbers
 def p43():
     i17dict = dict()
     base_set = set(string.digits)
     i = 0
+	# Generate a dictionary of choices for d8d9d10 that contain unique digits and are % 17.
+	# The dictionary is described in p43_generate_next_dict
     while i * 17 < 1000:
         i7 = str(i*17)
         i7 = (3 - len(i7))*'0' + i7
@@ -315,12 +307,15 @@ def p43():
         if len(i7set) == 3:
             i17dict[i7[:2]] = (i7, base_set.difference(set(i7set)))
         i += 1
+	# Iterate over the rest of the factors
     factors_to_test = (13, 11, 7, 5, 3, 2)
     dict_2_test = i17dict
     for factor in factors_to_test:
         dict_2_test = p43_generate_next_dict(dict_2_test, factor)
+	# Sum up the remaining pandigital solutions.
     sum_pandigital_values = 0
     for value in dict_2_test.values():
+	# At this point there's only a single digit that hasn't been tried yet
         digit_left = ""
         for i in value[1]:
             digit_left = i
