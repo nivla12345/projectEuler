@@ -277,46 +277,22 @@ def p42():
         num_triangle_words += Tools.get_alphabetic_value_of_word(word) in tri_numbers
     return num_triangle_words
 
-seen_p43 = set()
 
-
-# Takes a string n that represents the pandigital number to check
-def matches_p43_requirement(n):
-    d234  = int(n[1:4]) % 2
-    d345  = int(n[2:5]) % 3
-    d456  = int(n[3:6]) % 5
-    d567  = int(n[4:7]) % 7
-    d678  = int(n[5:8]) % 11
-    d789  = int(n[6:9]) % 13
-    d8910 = int(n[7:])  % 17
-    return (d234 + d345 + d456 + d567 + d678 + d789 + d8910) == 0
-
-
-# Returns the valid choices for a given digit place
-def p43_get_valid_digits(n):
-    if n == 0:
-        return string.digits[1:]
-    if n == 3:
-        return "02468"
-    if n == 5:
-        return "05"
-    return string.digits
-
-
-def p43_make_valid_pandigital_numbers(pandigital_number="", digits_left=string.digits):
-    pan_len = len(pandigital_number)
-    if pan_len == 10:
-        if matches_p43_requirement(pandigital_number):
-            seen_p43.add(pandigital_number)
-            return pandigital_number
-        return 0
-    sum_of_matching = 0
-#    valid_digits = p43_get_valid_digits(pan_len)
-    for i in xrange(len(digits_left)):
-        sum_of_matching += int(p43_make_valid_pandigital_numbers(
-            pandigital_number + digits_left[i],
-            digits_left[0:i] + digits_left[i+1:]))
-    return sum_of_matching
+# Constructs a dictionary of the following format:
+# key (2 least significant digits for to test factors)
+# value is a 2 element tuple
+# 0) The current running potential pandigital number
+# 1) The digits left to test
+def p43_generate_next_dict(previous_dict, current_factor):
+    i13dict = dict()
+    for lsd2 in previous_dict:
+        viable_digits = previous_dict[lsd2][1]
+        for digit in viable_digits:
+            potential_match = digit + lsd2
+            if int(potential_match) % current_factor == 0:
+                new_set = viable_digits.difference(set(digit))
+                i13dict[digit + lsd2[0]] = (digit + previous_dict[lsd2][0], new_set)
+    return i13dict
 
 
 # Find the sum of all pandigital numbers whos 3 digit products are divisible by primes.
@@ -329,4 +305,24 @@ def p43_make_valid_pandigital_numbers(pandigital_number="", digits_left=string.d
 # d8d9d10 % 17, d10 anything
 # Additionally, d1 != 0
 def p43():
-    return p43_make_valid_pandigital_numbers()
+    i17dict = dict()
+    base_set = set(string.digits)
+    i = 0
+    while i * 17 < 1000:
+        i7 = str(i*17)
+        i7 = (3 - len(i7))*'0' + i7
+        i7set = set(i7) 
+        if len(i7set) == 3:
+            i17dict[i7[:2]] = (i7, base_set.difference(set(i7set)))
+        i += 1
+    factors_to_test = (13, 11, 7, 5, 3, 2)
+    dict_2_test = i17dict
+    for factor in factors_to_test:
+        dict_2_test = p43_generate_next_dict(dict_2_test, factor)
+    sum_pandigital_values = 0
+    for value in dict_2_test.values():
+        digit_left = ""
+        for i in value[1]:
+            digit_left = i
+        sum_pandigital_values += int(digit_left + value[0])
+    return sum_pandigital_values

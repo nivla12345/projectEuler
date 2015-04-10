@@ -368,6 +368,11 @@ def get_alphabetic_value_of_word(word):
     return word_value
 
 
+def print_dict(dictionary):
+    for key in dictionary:
+        print key, ": ", dictionary[key]
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):
