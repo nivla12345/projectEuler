@@ -350,6 +350,24 @@ def make_pandigital(n):
     return int(pandigital_value)
 
 
+letters_2_numbers = dict()
+
+
+def generate_letters_2_numbers():
+    count = 0
+    for letter in string.ascii_lowercase:
+        count += 1
+        letters_2_numbers[letter] = count
+
+
+# Returns the alphabetic value of a word
+def get_alphabetic_value_of_word(word):
+    word_value = 0
+    for letter in word:
+        word_value += letters_2_numbers[letter]
+    return word_value
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):
