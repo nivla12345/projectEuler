@@ -609,7 +609,7 @@ def p24():
     return millionth_permutation
 
 
-# REturns the first fibonacci number with > 1000 digits
+# Returns the first fibonacci number with > 1000 digits
 def p25():
     smallest_thousand_number = int("1" + "0" * 999)
     n = 2

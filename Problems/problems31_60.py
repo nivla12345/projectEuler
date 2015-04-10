@@ -10,7 +10,7 @@ from memoize import Memoize
 # M = c0*x0 + c1*x1 + c2*x2 ....
 # I have just written a generic solution for this problem
 # def p31():
-#     return Tools.generic_ways_to_make_target(200, (200, 100, 50, 20, 10, 5, 2, 1))
+# return Tools.generic_ways_to_make_target(200, (200, 100, 50, 20, 10, 5, 2, 1))
 #
 # Attempt #2 at solving using dynamic programming
 def p31():
@@ -89,7 +89,7 @@ def p33():
 # Find the sum of all numbers who's factorial sum of digits is equal to the number itself.
 def p34():
     # This value is 7 digits meaning that any further values will cannot mathematically reach that value
-    maximum_possible_number = 7*math.factorial(9)
+    maximum_possible_number = 7 * math.factorial(9)
     sum_of_qualifying_numbers = 0
     for i in xrange(10, maximum_possible_number):
         if Tools.permutation_sum_of_digits(i) == i:
@@ -105,7 +105,7 @@ def generate_and_test_cycle_primes(current_number, target_length):
         return Tools.is_n_cycle_prime(current_number)
     count_cycle_primes = 0
     for i in p35_viable_values:
-        count_cycle_primes += generate_and_test_cycle_primes(current_number*10 + i, target_length)
+        count_cycle_primes += generate_and_test_cycle_primes(current_number * 10 + i, target_length)
     return count_cycle_primes
 
 
@@ -165,7 +165,7 @@ def p38():
     # Number of digits for n
     for i in xrange(6, 2, -1):
         start_point = pow(10, i) - 1
-        end_point = pow(10, i-1)*9
+        end_point = pow(10, i - 1) * 9
         for n in xrange(start_point, end_point, -1):
             pandigital = Tools.make_pandigital(n)
             if Tools.is_pandigital(pandigital):
@@ -186,7 +186,7 @@ def p38():
 # Instead of using a hashtable, I just used an array that used the index as a key. This takes up more space but given we
 # have a finite number of perfect squares being 1001 this was affordable.
 def p39():
-    num_perfect_square = [0]*1001
+    num_perfect_square = [0] * 1001
     # This bound was derived given m = 31 would yield an a + b + c > 1000
     for m in xrange(2, 32):
         # Iterating up to m satisfies the m > n condition
@@ -194,19 +194,19 @@ def p39():
         for n in xrange(1 + m_minus_n_odd % 2, m, 2):
             if Tools.euclid_gcd(m, n) != 1:
                 continue
-            a = m*m - n*n
-            b = 2*m*n
-            c = m*m + n*n
+            a = m * m - n * n
+            b = 2 * m * n
+            c = m * m + n * n
             perimeter = a + b + c
             if perimeter > 1000:
                 continue
             num_perfect_square[perimeter] += 1
             k = 2
-            perimeter_copy = perimeter*k
+            perimeter_copy = perimeter * k
             while perimeter_copy < 1000:
                 num_perfect_square[perimeter_copy] += 1
                 k += 1
-                perimeter_copy = perimeter*k
+                perimeter_copy = perimeter * k
     return num_perfect_square.index(max(num_perfect_square))
 
 
@@ -216,6 +216,39 @@ def p40():
     d = "."
     count = 1
     while len(d) < 1000001:
-        d = d + str(count)
+        d += str(count)
         count += 1
-    return int(d[1])*int(d[10])*int(d[100])*int(d[1000])*int(d[10000])*int(d[100000])*int(d[1000000])
+    return int(d[1]) * int(d[10]) * int(d[100]) * int(d[1000]) * int(d[10000]) * int(d[100000]) * int(d[1000000])
+
+
+# Generates pandigital numbers and returns the largest prime
+def generate_largest_pandigital_prime(available_digits="7654321", running_number=""):
+    if available_digits == "":
+        pandigital = int(running_number)
+        if Tools.is_prime(pandigital):
+            return pandigital
+        return 0
+    for i in xrange(len(available_digits)):
+        pandigital = generate_largest_pandigital_prime(
+            available_digits[0:i] + available_digits[i + 1:],
+            running_number + available_digits[i])
+        if pandigital:
+            return pandigital
+    return 0
+
+
+def p41():
+    """
+    available_digits = "4321"
+    count = 5
+    current_pandigital = generate_largest_pandigital_prime(available_digits, "")
+    max_pandigital = current_pandigital
+    while current_pandigital:
+        if current_pandigital:
+            max_pandigital = current_pandigital
+        available_digits = str(count) + available_digits
+        current_pandigital = generate_largest_pandigital_prime(available_digits, "")
+        count += 1
+    return max_pandigital
+    """
+    return generate_largest_pandigital_prime()
