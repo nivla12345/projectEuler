@@ -1,8 +1,10 @@
 __author__ = 'Alvin'
-import Tools
 import math
 import string
-from memoize import Memoize
+
+import Tools
+from PandigitalSet import PandigitalSet
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -175,7 +177,7 @@ def p38():
 
 # Find the perimeter of a right triangle that yields the most pythagorian triplets.
 # The algorithm here is to generate only pythagorian triplets. I do so by using Euclid's algorithm where:
-#   a = k * (m**2 - n**2)
+# a = k * (m**2 - n**2)
 #   b = k * (2*m*n)
 #   c = m**2 + n**2
 # The conditions being:
@@ -242,7 +244,7 @@ def generate_largest_pandigital_prime(available_digits="7654321", running_number
 # However, I was testing this and tried submitting this as an answer and it worked out.
 def p41():
     return generate_largest_pandigital_prime()
-    return int(d[1])*int(d[10])*int(d[100])*int(d[1000])*int(d[10000])*int(d[100000])*int(d[1000000])
+    return int(d[1]) * int(d[10]) * int(d[100]) * int(d[1000]) * int(d[10000]) * int(d[100000]) * int(d[1000000])
 
 
 # Find the number of words that form triangle numbers
@@ -254,10 +256,10 @@ def p42():
             words = line.split(',')
             break
     # Its unlikely that words will be larger than this value
-    triange_numbers_to_generate = 1000
+    triangle_numbers_to_generate = 1000
     tri_numbers = set()
     # Generate triangle numbers
-    for i in xrange(1, triange_numbers_to_generate):
+    for i in xrange(1, triangle_numbers_to_generate):
         tri_numbers.add(Tools.summation(i))
     Tools.generate_letters_2_numbers()
     # Iterate over words
@@ -298,26 +300,39 @@ def p43():
     i17dict = dict()
     base_set = set(string.digits)
     i = 0
-	# Generate a dictionary of choices for d8d9d10 that contain unique digits and are % 17.
-	# The dictionary is described in p43_generate_next_dict
+    # Generate a dictionary of choices for d8d9d10 that contain unique digits and are % 17.
+    # The dictionary is described in p43_generate_next_dict
     while i * 17 < 1000:
-        i7 = str(i*17)
-        i7 = (3 - len(i7))*'0' + i7
-        i7set = set(i7) 
+        i7 = str(i * 17)
+        i7 = (3 - len(i7)) * '0' + i7
+        i7set = set(i7)
         if len(i7set) == 3:
             i17dict[i7[:2]] = (i7, base_set.difference(set(i7set)))
         i += 1
-	# Iterate over the rest of the factors
+    # Iterate over the rest of the factors
     factors_to_test = (13, 11, 7, 5, 3, 2)
     dict_2_test = i17dict
     for factor in factors_to_test:
         dict_2_test = p43_generate_next_dict(dict_2_test, factor)
-	# Sum up the remaining pandigital solutions.
+    # Sum up the remaining pandigital solutions.
     sum_pandigital_values = 0
     for value in dict_2_test.values():
-	# At this point there's only a single digit that hasn't been tried yet
+        # At this point there's only a single digit that hasn't been tried yet
         digit_left = ""
         for i in value[1]:
             digit_left = i
         sum_pandigital_values += int(digit_left + value[0])
     return sum_pandigital_values
+
+
+# Find the difference between the pair of numbers who's sum and difference is pentagonal
+def p44():
+    n = 2
+    pentagonal_set = PandigitalSet()
+    while True:
+        pj = pentagonal_set.get_nth(n)
+        for n_pk in xrange(1, n):
+            pk = pentagonal_set.get_nth(n_pk)
+            if pentagonal_set.contains_value(pj + pk, abs(pj - pk)):
+                return abs(pj - pk)
+        n += 1
