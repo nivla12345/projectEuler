@@ -12,15 +12,17 @@ import abc
 
 class ExpandingSet:
 
-    def __init__(self, starting_value):
+    def __init__(self, starting_value, starting_n=0):
         # sequence_set stores all values seen in the sequence thus far
         self.sequence_set = set([starting_value])
         # sequence list, think of as an index mapped dictionary
         self.sequence_list = [starting_value]
         # n refers to the current n value of the sequence
+        self.starting_n = starting_n
         self.n = 0
 
     def get_nth(self, n):
+        n -= self.starting_n
         if self.n < n:
             self.calculate_up_to_n(n-1)
         return self.sequence_list[n-1]

@@ -341,3 +341,38 @@ def p44():
             n_pk -= 1
         n += 1
 
+
+# Find the number after 40755 that's a triangle, pentagonal, and hexagonal number
+def p45():
+    t = 40755
+    p = 40755
+    h = 40755
+    tn = 285
+    pn = 165
+    hn = 143
+    td = 1
+    pd = 3
+    hd = 4
+    t_diff = tn + td
+    p_diff = pn*pd + 1
+    h_diff = hn*hd + 1
+    t += t_diff
+    p += p_diff
+    h += h_diff
+    h_diff += hd
+    t_diff += td
+    p_diff += pd
+    while True:
+        while h > p:
+            p += p_diff
+            p_diff += pd
+        # If h == p, iterate t and test
+        if h == p:
+            while h > t:
+                t += t_diff
+                t_diff += td
+            if t == p:
+                return t
+        # Otherwise, increment h and repeat
+        h += h_diff
+        h_diff += hd
