@@ -3,7 +3,7 @@ import math
 import string
 
 import Tools
-from PandigitalSet import PandigitalSet
+from SequentialSet import SequentialSet
 
 # The problems that aren't in here were simple enough to do in the python command line.
 
@@ -328,11 +328,16 @@ def p43():
 # Find the difference between the pair of numbers who's sum and difference is pentagonal
 def p44():
     n = 2
-    pentagonal_set = PandigitalSet()
+    pentagonal_set = SequentialSet(1, 3)
     while True:
         pj = pentagonal_set.get_nth(n)
-        for n_pk in xrange(1, n):
+        n_pk = n - 1
+        while True:
             pk = pentagonal_set.get_nth(n_pk)
+            if pk < pentagonal_set.increment_by:
+                break
             if pentagonal_set.contains_value(pj + pk, abs(pj - pk)):
                 return abs(pj - pk)
+            n_pk -= 1
         n += 1
+
