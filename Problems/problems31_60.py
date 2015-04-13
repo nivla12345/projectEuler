@@ -376,3 +376,15 @@ def p45():
         # Otherwise, increment h and repeat
         h += h_diff
         h_diff += hd
+
+
+# Find the largest odd composite that cannot be made from the sum of a prime and 2x a square
+def p45():
+    smallest_composite = 33
+    prime_set = PrimeSet()
+    twice_square_set = TwiceSquareSet()
+    while True:
+        if not Tools.is_prime(smallest_composite):
+            if p45_test(smallest_composite):
+                return smallest_composite
+        smallest_composite += 2

@@ -10,7 +10,6 @@ from memoize import Memoize
 
 PHI = (1 + math.sqrt(5)) / 2
 ALL_DIGITS = string.digits + string.letters
-PRIMES = set()
 
 
 # Only works up to n == 1474
@@ -29,8 +28,6 @@ def fibonacci(n):
 
 
 def is_prime(x):
-    if x in PRIMES:
-        return True
     if x <= 1:
         return False
     if x <= 3:
@@ -41,7 +38,6 @@ def is_prime(x):
     for i in xrange(3, root + 1, 2):
         if x % i == 0:
             return False
-    PRIMES.add(x)
     return True
 
 

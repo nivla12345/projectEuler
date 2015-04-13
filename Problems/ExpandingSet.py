@@ -50,7 +50,7 @@ class ExpandingSet:
     # If the set does not go up to the current value, we calculate up to and including the nth term of the sequence
     # These should be private
     def calculate_up_to_value(self, value):
-        while self.n < value:
+        while self.value < value:
             self.update_sequence_set_and_list(self.sequence_function())
 
     def update_sequence_set_and_list(self, value):
