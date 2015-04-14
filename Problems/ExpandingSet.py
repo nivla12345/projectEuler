@@ -24,8 +24,8 @@ class ExpandingSet:
     def get_nth(self, n):
         n -= self.starting_n
         if self.n < n:
-            self.calculate_up_to_n(n-1)
-        return self.sequence_list[n-1]
+            self.calculate_up_to_n(n)
+        return self.sequence_list[n]
 
     # This functions only works if the sequence is increasing, it will need to be overriden if the sequence does not
     # increase.

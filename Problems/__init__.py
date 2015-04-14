@@ -6,8 +6,8 @@ import problems1_30
 import problems31_60
 
 
-constant_iterations = 1
-function_to_run = problems31_60.p45()
+constant_iterations = 10
+function_to_run = problems31_60.p46()
 
 t0 = time.time()
 if constant_iterations == 1:

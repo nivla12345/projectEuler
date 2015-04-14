@@ -4,6 +4,7 @@ import string
 
 import Tools
 from SequentialSet import SequentialSet
+from TwiceSquareSet import TwiceSquareSet
 
 # The problems that aren't in here were simple enough to do in the python command line.
 
@@ -378,13 +379,23 @@ def p45():
         h_diff += hd
 
 
+def p46_test(composite, twice_square_set):
+    nth_square = 0
+    while True:
+        twice_square = twice_square_set.get_nth(nth_square)
+        if Tools.is_prime(composite - twice_square):
+            return False
+        if twice_square >= composite:
+            return True
+        nth_square += 1
+
+
 # Find the largest odd composite that cannot be made from the sum of a prime and 2x a square
-def p45():
+def p46():
     smallest_composite = 33
-    prime_set = PrimeSet()
     twice_square_set = TwiceSquareSet()
     while True:
         if not Tools.is_prime(smallest_composite):
-            if p45_test(smallest_composite):
+            if p46_test(smallest_composite, twice_square_set):
                 return smallest_composite
         smallest_composite += 2
