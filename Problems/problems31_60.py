@@ -429,12 +429,11 @@ def p48():
 def p49():
     # This dictionary maps 4 unique digits to the number of prime pandigital values that appear
     prime_pandigital_dict = dict()
-    for i in xrange(1023, 9876):
+    for i in xrange(1001, 9998):
         if Tools.is_prime(i):
             str_i = str(i)
-            if len(set(str_i)) == 4:
-                key = "".join(sorted(str_i))
-                prime_pandigital_dict[key] = prime_pandigital_dict.get(key, []) + [i]
+            key = "".join(sorted(str_i))
+            prime_pandigital_dict[key] = prime_pandigital_dict.get(key, []) + [i]
     # Iterate through keys find sequences with 2 or more differences
     sequences_with_dup_diffs = []
     for key in prime_pandigital_dict:
@@ -445,7 +444,7 @@ def p49():
             for i in xrange(1, num_choices):
                 for j in xrange(i):
                     difference = choices[i] - choices[j]
-                    if 4427 > difference > 170:
+                    if 4500 > difference:
                         differences.append(difference)
             duplicates = Tools.get_duplicates(differences)
             if len(duplicates):
@@ -462,3 +461,43 @@ def p49():
                 if potential_sum0 in actual_numbers and potential_sum1 in actual_numbers:
                     qualifying_sequence.append(str(number) + str(potential_sum0) + str(potential_sum1))
     return qualifying_sequence
+
+
+# Find the largest prime under 1 million that can be written as the sum of the most consecutive primes
+def p50():
+    list_prime = []
+    set_prime = set()
+    # Generate primes under 500,000. 500,000 because the sum must be less than 1 million
+    for i in xrange(2, 500000):
+        if Tools.is_prime(i):
+            list_prime.append(i)
+            set_prime.add(i)
+    # Fill in the rest of set_prime to test primality
+    for i in xrange(500000, 1000000):
+        if Tools.is_prime(i):
+            set_prime.add(i)
+    longest_sequence_length = 0
+    longest_prime_sum = 0
+    # Handle the 2 is prime case
+    starting_prime = 2
+    sequence_length = 1
+    sum_longest_prime = starting_prime
+    for i in xrange(2, len(list_prime), 2):
+        sum_longest_prime += list_prime[i - 1] + list_prime[i]
+        sequence_length += 2
+        if sum_longest_prime in set_prime:
+            if sequence_length > longest_sequence_length:
+                longest_prime_sum = sum_longest_prime
+    # Find the longest consecutive sequence
+    for n in xrange(1, len(list_prime)):
+        # generate sequence
+        starting_prime = list_prime[n]
+        sequence_length = 1
+        sum_longest_prime = starting_prime
+        for i in xrange(n + 2, len(list_prime), 2):
+            sum_longest_prime += list_prime[i - 1] + list_prime[i]
+            sequence_length += 2
+            if sum_longest_prime in set_prime:
+                if sequence_length > longest_sequence_length:
+                    longest_prime_sum = sum_longest_prime
+    return longest_prime_sum
