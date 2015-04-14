@@ -416,3 +416,13 @@ def p47():
         n1 = n2
         n2 = n3
         n3 = len(Tools.prime_factors(n + 3))
+
+
+def p48():
+    sum_powers = 0
+    for i in xrange(1, 1001):
+        sum_powers += pow(i, i)
+    sum_powers_str = str(sum_powers)
+    return sum_powers_str[len(sum_powers_str)-10:]
+
+
