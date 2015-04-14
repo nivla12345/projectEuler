@@ -467,14 +467,10 @@ def p49():
 def p50():
     list_prime = []
     set_prime = set()
-    # Generate primes under 500,000. 500,000 because the sum must be less than 1 million
-    for i in xrange(2, 500000):
+    # Generate primes under 1,000,000.
+    for i in xrange(2, 1000000):
         if Tools.is_prime(i):
             list_prime.append(i)
-            set_prime.add(i)
-    # Fill in the rest of set_prime to test primality
-    for i in xrange(500000, 1000000):
-        if Tools.is_prime(i):
             set_prime.add(i)
     longest_sequence_length = 0
     longest_prime_sum = 0
@@ -488,6 +484,7 @@ def p50():
         if sum_longest_prime in set_prime:
             if sequence_length > longest_sequence_length:
                 longest_prime_sum = sum_longest_prime
+                longest_sequence_length = sequence_length
     # Find the longest consecutive sequence
     for n in xrange(1, len(list_prime)):
         # generate sequence
@@ -497,7 +494,9 @@ def p50():
         for i in xrange(n + 2, len(list_prime), 2):
             sum_longest_prime += list_prime[i - 1] + list_prime[i]
             sequence_length += 2
-            if sum_longest_prime in set_prime:
-                if sequence_length > longest_sequence_length:
-                    longest_prime_sum = sum_longest_prime
+            if sum_longest_prime in set_prime and sequence_length > longest_sequence_length:
+                longest_prime_sum = sum_longest_prime
+                longest_sequence_length = sequence_length
+            if sum_longest_prime > 999999:
+                break
     return longest_prime_sum
