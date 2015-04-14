@@ -8,7 +8,7 @@ import Tools
 
 constant_iterations = 1
 # function_to_run = Tools.prime_factors(25)
-function_to_run = problems31_60.p48()
+function_to_run = problems31_60.p49()
 
 t0 = time.time()
 if constant_iterations == 1:

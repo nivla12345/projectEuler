@@ -396,6 +396,22 @@ def prime_factors(n):
     return prime_factor_set
 
 
+def print_list(n):
+    for i in n:
+        print i
+
+
+def get_duplicates(a):
+    seen = set()
+    duplicates = set()
+    for x in a:
+        if x not in seen:
+            seen.add(x)
+        else:
+            duplicates.add(x)
+    return duplicates
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):

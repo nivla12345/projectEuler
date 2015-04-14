@@ -426,3 +426,39 @@ def p48():
     return sum_powers_str[len(sum_powers_str)-10:]
 
 
+def p49():
+    # This dictionary maps 4 unique digits to the number of prime pandigital values that appear
+    prime_pandigital_dict = dict()
+    for i in xrange(1023, 9876):
+        if Tools.is_prime(i):
+            str_i = str(i)
+            if len(set(str_i)) == 4:
+                key = "".join(sorted(str_i))
+                prime_pandigital_dict[key] = prime_pandigital_dict.get(key, []) + [i]
+    # Iterate through keys find sequences with 2 or more differences
+    sequences_with_dup_diffs = []
+    for key in prime_pandigital_dict:
+        choices = prime_pandigital_dict[key]
+        num_choices = len(choices)
+        if num_choices > 2:
+            differences = []
+            for i in xrange(1, num_choices):
+                for j in xrange(i):
+                    difference = choices[i] - choices[j]
+                    if 4427 > difference > 170:
+                        differences.append(difference)
+            duplicates = Tools.get_duplicates(differences)
+            if len(duplicates):
+                sequences_with_dup_diffs.append((choices, duplicates))
+    # Test the duplicate differences
+    qualifying_sequence = []
+    for potential in sequences_with_dup_diffs:
+        actual_numbers = potential[0]
+        duplicates = potential[1]
+        for duplicate in duplicates:
+            for number in actual_numbers:
+                potential_sum0 = number + duplicate
+                potential_sum1 = potential_sum0 + duplicate
+                if potential_sum0 in actual_numbers and potential_sum1 in actual_numbers:
+                    qualifying_sequence.append(str(number) + str(potential_sum0) + str(potential_sum1))
+    return qualifying_sequence
