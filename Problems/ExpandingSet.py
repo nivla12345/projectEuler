@@ -11,7 +11,6 @@ import abc
 
 
 class ExpandingSet:
-
     def __init__(self, starting_value, starting_n=0):
         # sequence_set stores all values seen in the sequence thus far
         self.sequence_set = set([starting_value])

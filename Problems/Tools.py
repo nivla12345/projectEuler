@@ -28,6 +28,10 @@ def fibonacci(n):
 
 
 def is_prime(x):
+    """
+
+    :rtype : returns a boolean
+    """
     if x <= 1:
         return False
     if x <= 3:
@@ -62,7 +66,7 @@ def num_divisors(n):
     return divisor_count
 
 
-# Returns the number of distinct divisors
+# Returns the sum of distinct factors
 def sum_divisors(n):
     if n <= 1:
         return 0
@@ -370,6 +374,26 @@ def get_alphabetic_value_of_word(word):
 def print_dict(dictionary):
     for key in dictionary:
         print key, ": ", dictionary[key]
+
+
+def prime_factors(n):
+    prime_factor_set = set()
+    if n < 4:
+        return prime_factor_set
+    root_n = int(math.sqrt(n)) + 1
+    even_n = n % 2
+    # The amount to increment if even should be 1
+    amount_to_increment = 1 + even_n
+    # The starting point should be 2 if even
+    starting_point = 2 + even_n
+    for i in xrange(starting_point, root_n, amount_to_increment):
+        if n % i == 0:
+            if is_prime(i):
+                prime_factor_set.add(i)
+            other_factor = n / i
+            if is_prime(other_factor):
+                prime_factor_set.add(other_factor)
+    return prime_factor_set
 
 
 # #######################################################################################################################

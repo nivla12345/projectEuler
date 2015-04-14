@@ -6,6 +6,7 @@ import Tools
 from SequentialSet import SequentialSet
 from TwiceSquareSet import TwiceSquareSet
 
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -179,7 +180,7 @@ def p38():
 # Find the perimeter of a right triangle that yields the most pythagorian triplets.
 # The algorithm here is to generate only pythagorian triplets. I do so by using Euclid's algorithm where:
 # a = k * (m**2 - n**2)
-#   b = k * (2*m*n)
+# b = k * (2*m*n)
 #   c = m**2 + n**2
 # The conditions being:
 #   m > n
@@ -355,8 +356,8 @@ def p45():
     pd = 3
     hd = 4
     t_diff = tn + td
-    p_diff = pn*pd + 1
-    h_diff = hn*hd + 1
+    p_diff = pn * pd + 1
+    h_diff = hn * hd + 1
     t += t_diff
     p += p_diff
     h += h_diff
@@ -399,3 +400,19 @@ def p46():
             if p46_test(smallest_composite, twice_square_set):
                 return smallest_composite
         smallest_composite += 2
+
+
+def p47():
+    n = 644
+    n0 = len(Tools.prime_factors(n))
+    n1 = len(Tools.prime_factors(n + 1))
+    n2 = len(Tools.prime_factors(n + 2))
+    n3 = len(Tools.prime_factors(n + 3))
+    while True:
+        if n0 == n1 == n2 == n3 == 4:
+            return n
+        n += 1
+        n0 = n1
+        n1 = n2
+        n2 = n3
+        n3 = len(Tools.prime_factors(n + 3))

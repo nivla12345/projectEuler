@@ -4,10 +4,11 @@ import time
 
 import problems1_30
 import problems31_60
+import Tools
 
-
-constant_iterations = 10
-function_to_run = problems31_60.p46()
+constant_iterations = 1
+# function_to_run = Tools.prime_factors(25)
+function_to_run = problems31_60.p47()
 
 t0 = time.time()
 if constant_iterations == 1:
