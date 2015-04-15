@@ -504,10 +504,48 @@ def p50():
     return longest_prime_sum
 
 
+def p51_test(n, primes):
+    num_digits = Tools.num_base_ten_digits(n) - 1
+    num_transformations = pow(2, num_digits)
+    # Iterates through the number of transformations
+    for i in xrange(1, num_transformations):
+        bin_val = bin(i)[2:]
+        i_bin = '0'*(num_digits - len(bin_val)) + bin_val + '0'
+        nine_choices = i_bin[0] == '1'
+        # Zero out corresponding digits
+        int_i_bin = int(i_bin)
+        if n == 56003 and i_bin == '00110':
+            print "asdf"
+        n_cp = zero_out_digits(n, int_i_bin, len(i_bin)) + nine_choices * int_i_bin
+        n_cp_cp = n_cp
+        # Start testing sequence
+        sequence_length = 0
+        for j in xrange(nine_choices, 10):
+            if primes.contains_value(n_cp):
+                sequence_length += 1
+            n_cp += int_i_bin
+        if sequence_length == 8:
+            return n_cp_cp
+    return 0
+
+
+# Retursn n with the one digits in i_bin zeroed out
+def zero_out_digits(n, i_bin, num_digits):
+    n_copy = n
+    running_subtractor = 0
+    for i in xrange(num_digits):
+        running_subtractor += (i_bin & 1) * (n_copy % 10) * pow(10, i)
+        n_copy /= 10
+        i_bin /= 10
+    return n - running_subtractor
+
+
 # Find the smallest prime where changing certain digits yields the largest prime
 def p51():
-    primes = PrimeSet((2, 3, 5, 7), 3)
-    for i in xrange(100):
-        if primes.contains_value(i):
-            print i
-    return
+    n = 4
+    primes = PrimeSet((2, 3, 5, 7, 11), 0)
+    while True:
+        nth_prime = primes.get_nth(n)
+        if p51_test(nth_prime, primes):
+            return nth_prime
+        n += 1

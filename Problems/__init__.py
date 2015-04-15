@@ -5,10 +5,11 @@ import time
 import problems1_30
 import problems31_60
 import Tools
+from PrimeSet import PrimeSet
 
 constant_iterations = 1
-# function_to_run = Tools.prime_factors(25)
-function_to_run = problems31_60.p51()
+# function_to_run = Tools.
+function_to_run = problems31_60.p51_test(120383, PrimeSet())
 
 t0 = time.time()
 if constant_iterations == 1:
