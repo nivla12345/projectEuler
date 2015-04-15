@@ -16,13 +16,14 @@ class ExpandingSet:
         if hasattr(starting_value, '__iter__'):
             self.sequence_list = list(starting_value)
             self.sequence_set = set(starting_value)
+            self.n = len(starting_value) - 1
         else:
             self.sequence_set = set([starting_value])
             # sequence list, think of as an index mapped dictionary
             self.sequence_list = [starting_value]
+            self.n = 0
         # n refers to the current n value of the sequence
         self.starting_n = starting_n
-        self.n = 0
 
     def get_nth(self, n):
         n -= self.starting_n
@@ -53,8 +54,11 @@ class ExpandingSet:
     # If the set does not go up to the current value, we calculate up to and including the nth term of the sequence
     # These should be private
     def calculate_up_to_value(self, value):
-        while self.value < value:
-            self.update_sequence_set_and_list(self.sequence_function())
+        max_in_sequence = self.sequence_list[-1]
+        while max_in_sequence < value:
+            max_in_sequence = self.sequence_function()
+            self.update_sequence_set_and_list(max_in_sequence)
+
 
     def update_sequence_set_and_list(self, value):
         self.sequence_list.append(value)

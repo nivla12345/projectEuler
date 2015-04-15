@@ -8,6 +8,8 @@ from TwiceSquareSet import TwiceSquareSet
 from PrimeSet import PrimeSet
 
 
+
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -247,7 +249,6 @@ def generate_largest_pandigital_prime(available_digits="7654321", running_number
 # However, I was testing this and tried submitting this as an answer and it worked out.
 def p41():
     return generate_largest_pandigital_prime()
-    return int(d[1]) * int(d[10]) * int(d[100]) * int(d[1000]) * int(d[10000]) * int(d[100000]) * int(d[1000000])
 
 
 # Find the number of words that form triangle numbers
@@ -505,4 +506,8 @@ def p50():
 
 # Find the smallest prime where changing certain digits yields the largest prime
 def p51():
+    primes = PrimeSet((2, 3, 5, 7), 3)
+    for i in xrange(100):
+        if primes.contains_value(i):
+            print i
     return
