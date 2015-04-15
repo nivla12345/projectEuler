@@ -5,6 +5,7 @@ import string
 import Tools
 from SequentialSet import SequentialSet
 from TwiceSquareSet import TwiceSquareSet
+from PrimeSet import PrimeSet
 
 
 # The problems that aren't in here were simple enough to do in the python command line.
@@ -500,3 +501,8 @@ def p50():
             if sum_longest_prime > 999999:
                 break
     return longest_prime_sum
+
+
+# Find the smallest prime where changing certain digits yields the largest prime
+def p51():
+    return

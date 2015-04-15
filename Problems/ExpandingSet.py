@@ -13,9 +13,13 @@ import abc
 class ExpandingSet:
     def __init__(self, starting_value, starting_n=0):
         # sequence_set stores all values seen in the sequence thus far
-        self.sequence_set = set([starting_value])
-        # sequence list, think of as an index mapped dictionary
-        self.sequence_list = [starting_value]
+        if hasattr(starting_value, '__iter__'):
+            self.sequence_list = list(starting_value)
+            self.sequence_set = set(starting_value)
+        else:
+            self.sequence_set = set([starting_value])
+            # sequence list, think of as an index mapped dictionary
+            self.sequence_list = [starting_value]
         # n refers to the current n value of the sequence
         self.starting_n = starting_n
         self.n = 0
