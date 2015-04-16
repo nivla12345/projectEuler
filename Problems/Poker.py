@@ -79,23 +79,19 @@ class Poker:
     def full_house(self, hand):
         return
 
+    @staticmethod
+    def compare(self, hand1, hand2):
+        return
 
-@staticmethod
-
-
-def compare(self, hand1, hand2):
-    return
-
-
-rank_functions = [
-    is_royal_flush,
-    is_straight_flush,
-    is_quadruple,
-    is_full_house,
-    is_flush,
-    is_straight,
-    is_triple,
-    is_pair
-]
+    rank_functions = [
+        royal_flush,
+        straight_flush,
+        quadruple,
+        full_house,
+        flush,
+        straight,
+        triple,
+        pair
+    ]
 
 
