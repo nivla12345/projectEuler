@@ -35,11 +35,20 @@ class Poker:
 
     @staticmethod
     def flush(self, hand):
-        return
+        suit_set = set()
+        for i in hand:
+            suit_set.add(i[-1])
+        return len(suit_set) > 1
 
     @staticmethod
     def straight(self, hand):
-        return
+        values = self.get_values(hand)
+        tracking_value = values[0]
+        for i in xrange(1, len(values)):
+            if values[i] != tracking_value + 1:
+                return False
+            tracking_value += 1
+        return tracking_value
 
     @staticmethod
     def straight_flush(self, hand):
@@ -65,6 +74,10 @@ class Poker:
 
     @staticmethod
     def triple(self, hand):
+        return
+
+    @staticmethod
+    def two_pair(self, hand):
         return
 
     @staticmethod
