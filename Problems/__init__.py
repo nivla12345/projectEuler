@@ -9,7 +9,7 @@ from PrimeSet import PrimeSet
 
 constant_iterations = 1
 # function_to_run = Tools.
-function_to_run = problems31_60.p51_test(120383, PrimeSet())
+function_to_run = problems31_60.p53()
 
 t0 = time.time()
 if constant_iterations == 1:

@@ -10,6 +10,9 @@ from PrimeSet import PrimeSet
 
 
 
+
+
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -184,7 +187,7 @@ def p38():
 # The algorithm here is to generate only pythagorian triplets. I do so by using Euclid's algorithm where:
 # a = k * (m**2 - n**2)
 # b = k * (2*m*n)
-#   c = m**2 + n**2
+# c = m**2 + n**2
 # The conditions being:
 #   m > n
 #   m and n must be coprime
@@ -425,7 +428,7 @@ def p48():
     for i in xrange(1, 1001):
         sum_powers += pow(i, i)
     sum_powers_str = str(sum_powers)
-    return sum_powers_str[len(sum_powers_str)-10:]
+    return sum_powers_str[len(sum_powers_str) - 10:]
 
 
 def p49():
@@ -510,12 +513,10 @@ def p51_test(n, primes):
     # Iterates through the number of transformations
     for i in xrange(1, num_transformations):
         bin_val = bin(i)[2:]
-        i_bin = '0'*(num_digits - len(bin_val)) + bin_val + '0'
+        i_bin = '0' * (num_digits - len(bin_val)) + bin_val + '0'
         nine_choices = i_bin[0] == '1'
         # Zero out corresponding digits
         int_i_bin = int(i_bin)
-        if n == 56003 and i_bin == '00110':
-            print "asdf"
         n_cp = zero_out_digits(n, int_i_bin, len(i_bin)) + nine_choices * int_i_bin
         n_cp_cp = n_cp
         # Start testing sequence
@@ -549,3 +550,31 @@ def p51():
         if p51_test(nth_prime, primes):
             return nth_prime
         n += 1
+
+
+def p52_test(n):
+    n_cmp = sorted(str(n))
+    for i in xrange(2, 7):
+        if n_cmp != sorted(str(i * n)):
+            return False
+    return True
+
+
+def p52():
+    track = 10
+    while True:
+        if p52_test(track):
+            return track
+        track += 1
+
+
+def p53():
+    factorials = [math.factorial(x) for x in range(101)]
+    over_million_count = 0
+    for n in xrange(2, 101):
+        for r in xrange(2, n):
+            if Tools.n_choose_r(n, r, factorials) > 1000000:
+                over_million_count += 1
+    return over_million_count
+
+

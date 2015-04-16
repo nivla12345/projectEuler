@@ -412,6 +412,10 @@ def get_duplicates(a):
     return duplicates
 
 
+def n_choose_r(n, r, factorials):
+    return factorials[n] / (factorials[r] * factorials[n - r])
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):
