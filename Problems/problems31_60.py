@@ -13,6 +13,7 @@ from PrimeSet import PrimeSet
 
 
 
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -578,3 +579,16 @@ def p53():
     return over_million_count
 
 
+def p54_test(p1hand, p2hand):
+    return False
+
+
+def p54():
+    p1_wins = 0
+    with open('p054_poker.txt', 'r') as f:
+        for line in f:
+            cards = line.split()
+            p1hand = cards[0:5]
+            p2hand = cards[5:10]
+            p1_wins += p54_test(p1hand, p2hand)
+    return p1_wins
