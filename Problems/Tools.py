@@ -127,7 +127,7 @@ def check_permutation(p):
 
 # Counts the number of digits in a base 10 number.
 def num_base_ten_digits(n):
-    n = int(math.fabs(n))
+    n = int(abs(n))
     if n == 0:
         return 1
     num_digits = 0
@@ -414,6 +414,24 @@ def get_duplicates(a):
 
 def n_choose_r(n, r, factorials):
     return factorials[n] / (factorials[r] * factorials[n - r])
+
+
+def sum_digits(n):
+    n = abs(n)
+    sum_of_digits = 0
+    while n > 0:
+        sum_of_digits += n%10
+        n /= 10
+    return sum_of_digits
+
+
+def simplify_fraction(a, b):
+    while True:
+        gcd = euclid_gcd(a, b)
+        if gcd == 1:
+            return a, b
+        a /= gcd
+        b /= gcd
 
 
 # #######################################################################################################################

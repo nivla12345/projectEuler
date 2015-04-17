@@ -6,13 +6,7 @@ import Tools
 from SequentialSet import SequentialSet
 from TwiceSquareSet import TwiceSquareSet
 from PrimeSet import PrimeSet
-
-
-
-
-
-
-
+import copy
 
 # The problems that aren't in here were simple enough to do in the python command line.
 
@@ -592,3 +586,60 @@ def p54():
             p2hand = cards[5:10]
             p1_wins += p54_test(p1hand, p2hand)
     return p1_wins
+
+
+def p55_is_lychrel(n):
+    for i in xrange(51):
+        n = n + Tools.reverse_int(n)
+        if Tools.is_palindrome(n):
+            return False
+    return True
+
+
+# Find the number of lychrel numbers below 10000
+def p55():
+    num_lychrels = 0
+    for i in xrange(1, 10000):
+        num_lychrels += p55_is_lychrel(i)
+    return num_lychrels
+
+
+# Find the largest sum of digits for a^b where a and b < 100
+def p56():
+    max_digits = 0
+    for a in xrange(1, 100):
+        for b in xrange(1, 100):
+            sum_digits = Tools.sum_digits(pow(a, b))
+            if sum_digits > max_digits:
+                max_digits = sum_digits
+    return max_digits
+
+
+def p57_calculate_sequence(seq):
+    current_op = "a"
+    seq.reverse()
+    denum = seq[0]
+    num = seq[1]
+    seq = seq[2:]
+    for i in seq:
+        if current_op == "a":
+            num += i*denum
+            current_op = "d"
+        else:
+            num_tmp = num
+            num = denum
+            denum = num_tmp
+            num *= i
+            current_op = "a"
+    new_fraction = Tools.simplify_fraction(num, denum)
+    return Tools.num_base_ten_digits(new_fraction[0]) > Tools.num_base_ten_digits(new_fraction[1])
+
+
+# Find the number of cases where the root 2 sequence has a greater numberator than denominator
+def p57():
+    ngd_count = 0
+    sequence = [1, 1, 2]
+    for i in xrange(1000):
+        ngd_count += p57_calculate_sequence(copy.deepcopy(sequence))
+        sequence = sequence + [1, 2]
+    return ngd_count
