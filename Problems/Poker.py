@@ -34,7 +34,11 @@ class Poker:
         return sorted(values)
 
     @staticmethod
-    def flush(self, hand):
+    def flush(hand):
+        """
+        :param hand:
+        :return: True if flush, False otherwise
+        """
         suit_set = set()
         for i in hand:
             suit_set.add(i[-1])
@@ -42,6 +46,11 @@ class Poker:
 
     @staticmethod
     def straight(self, hand):
+        """
+        Returns if value is straight, does not recognize Ace, 2, 3, 4, 5 as a straight.
+        :param hand:
+        :return: 0 is not straight, largest number in straight if straight.
+        """
         values = self.get_values(hand)
         tracking_value = values[0]
         for i in xrange(1, len(values)):
@@ -74,27 +83,102 @@ class Poker:
 
     @staticmethod
     def triple(self, hand):
-        return
-
-    @staticmethod
-    def two_pair(self, hand):
-        return
+        """
+        This method call returns a 3 element list. The list works as follows:
+        0: value of the number composing the triple, 0 if no triple
+        1: next largest number
+        2: smallest non-triple number
+        :param hand:
+        :return: list described above
+        """
+        values_dict = dict()
+        for i in self.get_values(hand):
+            if i in values_dict:
+                values_dict[i] = 1
+            else:
+                values_dict[i] += 1
+        return_list = [0, 0, 0]
+        for i in values_dict:
+            if values_dict[i] == 3:
+                return_list[0] = i
+                del values_dict[i]
+        return_list[1] = max(values_dict.keys())
+        return_list[2] = min(values_dict.keys())
+        return return_list
 
     @staticmethod
     def pair(self, hand):
-        return
-
-    @staticmethod
-    def quadruple(self, hand):
-        return
+        values_dict = dict()
+        return_list = [0] * 4
+        for i in self.get_values(hand):
+            if i in values_dict:
+                values_dict[i] = 1
+            else:
+                values_dict[i] += 1
+                return_list[0] = i
+        if return_list[0]:
+            del values_dict[return_list[0]]
+            return_list[1] = max(values_dict.keys())
+            del values_dict[return_list[1]]
+            return_list[2] = max(values_dict.keys())
+            del values_dict[return_list[2]]
+            return_list[3] = max(values_dict.keys())
+            del values_dict[return_list[3]]
+        return return_list
 
     @staticmethod
     def full_house(self, hand):
-        return
+        triple = self.triple(hand)
+        if triple[1] == triple[2]:
+            return triple[0], triple[1]
+        return 0, 0, 0
 
     @staticmethod
-    def compare(self, hand1, hand2):
-        return
+    def two_pair(self, hand):
+        values_dict = dict()
+        for i in self.get_values(hand):
+            if i in values_dict:
+                values_dict[i] = 1
+            else:
+                values_dict[i] += 1
+        return_list = [0, 0, 0]
+        twos = [0, 0]
+        twos_index = 0
+        for i in values_dict:
+            if values_dict[i] == 2:
+                twos[twos_index] = i
+                twos_index += 1
+            else:
+                return_list[2] = i
+        if 0 in twos:
+            return [0, 0, 0]
+        return_list[0] = max(twos)
+        return_list[1] = min(twos)
+        return return_list
+
+    @staticmethod
+    def quadruple(self, hand):
+        """
+        :param hand:
+        :return: If the first element is 0, not a quadruple.
+        """
+        values_dict = dict()
+        for i in self.get_values(hand):
+            if i in values_dict:
+                values_dict[i] = 1
+            else:
+                values_dict[i] += 1
+        return_list = [0, 0]
+        for i in values_dict:
+            if values_dict[i] == 4:
+                return_list[0] = i
+            else:
+                return_list[1] = i
+        return return_list
+
+    @staticmethod
+    def high_card(self, hand):
+        return self.get_values(hand)[-1]
 
     rank_functions = [
         royal_flush,
@@ -104,7 +188,13 @@ class Poker:
         flush,
         straight,
         triple,
-        pair
+        two_pair,
+        pair,
+        high_card
     ]
+
+    @staticmethod
+    def compare(self, hand1, hand2):
+        return
 
 
