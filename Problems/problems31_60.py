@@ -9,6 +9,7 @@ from TwiceSquareSet import TwiceSquareSet
 from PrimeSet import PrimeSet
 
 
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -661,3 +662,37 @@ def p58():
         add_by += 2
         if float(num_primes) / net_amount < 0.1:
             return current_level
+
+
+# Decrypt the p059_cipher.txt. The key consists of 3 lower case letters.
+# My plan is to look for some common words: the_, be_, to_, of_, and and_
+# If there is a single hit, I will record the results
+def p59():
+    encrypted_message = []
+    common_word = set([" the ", "the ", " the", "the"
+                                                " be ", "be ", " be", "be"
+                                                                      " to ", "to ", " to", "to"
+                                                                                            " of ", "of ", " of", "of"
+                                                                                                                  " and ",
+                       "and ", " and", "and"])
+    # Extract encrypted message to list
+    with open('p059_cipher.txt', 'r') as f:
+        for line in f:
+            encrypted_message = line.split(',')
+    # Decrypt message with potential key
+    for key0 in string.lowercase:
+        for key1 in string.lowercase:
+            for key2 in string.lowercase:
+                key = key0 + key1 + key2
+                decrypt_message = ""
+                i = 0
+                for letter in encrypted_message:
+                    decrypt_message += chr(int(letter) ^ ord(key[i]))
+                    i = (i + 1) % 3
+                count_word = 0
+                # Check if common words are in the decrypted message
+                for word in common_word:
+                    if word in decrypt_message:
+                        count_word += 1
+                    if count_word > 3:
+                        return sum([ord(i) for i in decrypt_message])
