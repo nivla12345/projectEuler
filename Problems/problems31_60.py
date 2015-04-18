@@ -1,12 +1,13 @@
 __author__ = 'Alvin'
 import math
 import string
+import copy
 
 import Tools
 from SequentialSet import SequentialSet
 from TwiceSquareSet import TwiceSquareSet
 from PrimeSet import PrimeSet
-import copy
+
 
 # The problems that aren't in here were simple enough to do in the python command line.
 
@@ -643,3 +644,20 @@ def p57():
         ngd_count += p57_calculate_sequence(copy.deepcopy(sequence))
         sequence = sequence + [1, 2]
     return ngd_count
+
+
+def p58():
+    current_val = 3
+    current_level = 1
+    num_primes = 0
+    net_amount = 1
+    add_by = 2
+    while True:
+        for j in xrange(4):
+            num_primes += Tools.is_prime(current_val + j * add_by)
+        net_amount += 4
+        current_level += 2
+        current_val += (add_by * 3 + add_by + 2)
+        add_by += 2
+        if float(num_primes) / net_amount < 0.1:
+            return current_level
