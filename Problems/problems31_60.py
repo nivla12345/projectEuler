@@ -10,6 +10,9 @@ from PrimeSet import PrimeSet
 
 
 
+
+
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -186,8 +189,8 @@ def p38():
 # b = k * (2*m*n)
 # c = m**2 + n**2
 # The conditions being:
-#   m > n
-#   m and n must be coprime
+# m > n
+# m and n must be coprime
 #   m - n is odd
 #   k can be any integer
 # See: https://en.wikipedia.org/wiki/Pythagorean_triple
@@ -625,7 +628,7 @@ def p57_calculate_sequence(seq):
     seq = seq[2:]
     for i in seq:
         if current_op == "a":
-            num += i*denum
+            num += i * denum
             current_op = "d"
         else:
             num_tmp = num
@@ -696,3 +699,78 @@ def p59():
                         count_word += 1
                     if count_word > 3:
                         return sum([ord(i) for i in decrypt_message])
+
+
+p60_qualifying_sets = set()
+
+# Find the smallest sum of a set of 5 primes that can be pairwise concatenated in any way and remain prime
+def p60():
+    prime_limit = 100000000
+    primes = Tools.prime_sieve_atkins(prime_limit)
+    prime_set = set(primes)
+    # Get sub primes that can be concatenated both ways to form the largest prime
+    sub_primes_dict = dict()
+    # At this point, all the primes are double digit or more
+    for prime_i in xrange(4, len(primes)):
+        current_prime_str = str(primes[prime_i])
+        for sub_i in xrange(1, len(current_prime_str)):
+            sub0 = str(int(current_prime_str[:sub_i]))  # Objective in doing this is to lop off any leading 0's
+            sub1 = str(int(current_prime_str[sub_i:]))
+            sub0_int = int(sub0)
+            sub1_int = int(sub1)
+            if int(sub1 + sub0) in prime_set in prime_set and sub0_int in prime_set and sub1_int in prime_set:
+                if sub0_int in sub_primes_dict:
+                    sub_primes_dict[sub0_int].add(sub1_int)
+                else:
+                    sub_primes_dict[sub0_int] = set([sub1_int])
+                if sub1_int in sub_primes_dict:
+                    sub_primes_dict[sub1_int].add(sub0_int)
+                else:
+                    sub_primes_dict[sub1_int] = set([sub0_int])
+    # Delete all keys and remove all values that don't have at least 4 different values
+    for k in sub_primes_dict.keys():
+        values = sub_primes_dict[k]
+        if len(values) < 4:
+            del sub_primes_dict[k]
+        else:
+            new_values = set()
+            for v in values:
+                if len(sub_primes_dict.get(v, [])) >= 4:
+                    new_values.add(v)
+            sub_primes_dict[k] = new_values
+    # At this point, all the keys and values are possible solutions
+    for i in sub_primes_dict:
+        running_set = sub_primes_dict[i]
+        p60_recurse_through((i,), running_set, sub_primes_dict, p60_qualifying_sets)
+    min_sum = 999999999
+    min_tuple = ()
+    for i in p60_qualifying_sets:
+        sum_i = sum(i)
+        if sum_i < min_sum:
+            min_sum = sum_i
+            min_tuple = i
+        print i
+    print min_tuple
+    return min_sum
+
+
+def p60_recurse_through(qualifying_primes, intersections, sub_primes_dict, qualifying_sets):
+    if len(qualifying_primes) >= 5:
+        qualifying_sets.add(qualifying_primes)
+    for prime in intersections:
+        if set(qualifying_primes).issubset(sub_primes_dict[prime]):
+            p60_recurse_through(qualifying_primes + (prime,),
+                                intersections.intersection(sub_primes_dict[prime]),
+                                sub_primes_dict,
+                                qualifying_sets)
+
+
+def p60_matches_requirement(prime_set, primes):
+    for i in prime_set:
+        for j in prime_set:
+            if i == j:
+                continue
+            if int(str(i) + str(j)) not in primes or int(str(j) + str(i)) not in primes:
+                print i, j
+                return False
+    return True
