@@ -1,16 +1,12 @@
 __author__ = 'Alvin'
 import math
 import string
+import copy
 
 import Tools
 from SequentialSet import SequentialSet
 from TwiceSquareSet import TwiceSquareSet
 from PrimeSet import PrimeSet
-
-
-
-
-
 
 
 
@@ -195,7 +191,11 @@ def p38():
 # The conditions being:
 # m > n
 # m and n must be coprime
+<<<<<<< HEAD
 # m - n is odd
+=======
+#   m - n is odd
+>>>>>>> e9c47588a644c6857ab3dabe5cf2f2e471434e99
 #   k can be any integer
 # See: https://en.wikipedia.org/wiki/Pythagorean_triple
 # Instead of using a hashtable, I just used an array that used the index as a key. This takes up more space but given we
@@ -592,5 +592,193 @@ def p54():
             cards = line.split()
             p1hand = cards[0:5]
             p2hand = cards[5:10]
+<<<<<<< HEAD
             p1_wins += Poker.compare(p1hand, p2hand)
     return p1_wins
+=======
+            p1_wins += p54_test(p1hand, p2hand)
+    return p1_wins
+
+
+def p55_is_lychrel(n):
+    for i in xrange(51):
+        n = n + Tools.reverse_int(n)
+        if Tools.is_palindrome(n):
+            return False
+    return True
+
+
+# Find the number of lychrel numbers below 10000
+def p55():
+    num_lychrels = 0
+    for i in xrange(1, 10000):
+        num_lychrels += p55_is_lychrel(i)
+    return num_lychrels
+
+
+# Find the largest sum of digits for a^b where a and b < 100
+def p56():
+    max_digits = 0
+    for a in xrange(1, 100):
+        for b in xrange(1, 100):
+            sum_digits = Tools.sum_digits(pow(a, b))
+            if sum_digits > max_digits:
+                max_digits = sum_digits
+    return max_digits
+
+
+def p57_calculate_sequence(seq):
+    current_op = "a"
+    seq.reverse()
+    denum = seq[0]
+    num = seq[1]
+    seq = seq[2:]
+    for i in seq:
+        if current_op == "a":
+            num += i * denum
+            current_op = "d"
+        else:
+            num_tmp = num
+            num = denum
+            denum = num_tmp
+            num *= i
+            current_op = "a"
+    new_fraction = Tools.simplify_fraction(num, denum)
+    return Tools.num_base_ten_digits(new_fraction[0]) > Tools.num_base_ten_digits(new_fraction[1])
+
+
+# Find the number of cases where the root 2 sequence has a greater numberator than denominator
+def p57():
+    ngd_count = 0
+    sequence = [1, 1, 2]
+    for i in xrange(1000):
+        ngd_count += p57_calculate_sequence(copy.deepcopy(sequence))
+        sequence = sequence + [1, 2]
+    return ngd_count
+
+
+def p58():
+    current_val = 3
+    current_level = 1
+    num_primes = 0
+    net_amount = 1
+    add_by = 2
+    while True:
+        for j in xrange(4):
+            num_primes += Tools.is_prime(current_val + j * add_by)
+        net_amount += 4
+        current_level += 2
+        current_val += (add_by * 3 + add_by + 2)
+        add_by += 2
+        if float(num_primes) / net_amount < 0.1:
+            return current_level
+
+
+# Decrypt the p059_cipher.txt. The key consists of 3 lower case letters.
+# My plan is to look for some common words: the_, be_, to_, of_, and and_
+# If there is a single hit, I will record the results
+def p59():
+    encrypted_message = []
+    common_word = set([" the ", "the ", " the", "the"
+                                                " be ", "be ", " be", "be"
+                                                                      " to ", "to ", " to", "to"
+                                                                                            " of ", "of ", " of", "of"
+                                                                                                                  " and ",
+                       "and ", " and", "and"])
+    # Extract encrypted message to list
+    with open('p059_cipher.txt', 'r') as f:
+        for line in f:
+            encrypted_message = line.split(',')
+    # Decrypt message with potential key
+    for key0 in string.lowercase:
+        for key1 in string.lowercase:
+            for key2 in string.lowercase:
+                key = key0 + key1 + key2
+                decrypt_message = ""
+                i = 0
+                for letter in encrypted_message:
+                    decrypt_message += chr(int(letter) ^ ord(key[i]))
+                    i = (i + 1) % 3
+                count_word = 0
+                # Check if common words are in the decrypted message
+                for word in common_word:
+                    if word in decrypt_message:
+                        count_word += 1
+                    if count_word > 3:
+                        return sum([ord(i) for i in decrypt_message])
+
+
+p60_qualifying_sets = set()
+
+# Find the smallest sum of a set of 5 primes that can be pairwise concatenated in any way and remain prime
+def p60():
+    prime_limit = 100000000
+    primes = Tools.prime_sieve_atkins(prime_limit)
+    prime_set = set(primes)
+    # Get sub primes that can be concatenated both ways to form the largest prime
+    sub_primes_dict = dict()
+    # At this point, all the primes are double digit or more
+    for prime_i in xrange(4, len(primes)):
+        current_prime_str = str(primes[prime_i])
+        for sub_i in xrange(1, len(current_prime_str)):
+            sub0 = str(int(current_prime_str[:sub_i]))  # Objective in doing this is to lop off any leading 0's
+            sub1 = str(int(current_prime_str[sub_i:]))
+            sub0_int = int(sub0)
+            sub1_int = int(sub1)
+            if int(sub1 + sub0) in prime_set in prime_set and sub0_int in prime_set and sub1_int in prime_set:
+                if sub0_int in sub_primes_dict:
+                    sub_primes_dict[sub0_int].add(sub1_int)
+                else:
+                    sub_primes_dict[sub0_int] = set([sub1_int])
+                if sub1_int in sub_primes_dict:
+                    sub_primes_dict[sub1_int].add(sub0_int)
+                else:
+                    sub_primes_dict[sub1_int] = set([sub0_int])
+    # Delete all keys and remove all values that don't have at least 4 different values
+    for k in sub_primes_dict.keys():
+        values = sub_primes_dict[k]
+        if len(values) < 4:
+            del sub_primes_dict[k]
+        else:
+            new_values = set()
+            for v in values:
+                if len(sub_primes_dict.get(v, [])) >= 4:
+                    new_values.add(v)
+            sub_primes_dict[k] = new_values
+    # At this point, all the keys and values are possible solutions
+    for i in sub_primes_dict:
+        running_set = sub_primes_dict[i]
+        p60_recurse_through((i,), running_set, sub_primes_dict, p60_qualifying_sets)
+    min_sum = 999999999
+    min_tuple = ()
+    for i in p60_qualifying_sets:
+        sum_i = sum(i)
+        if sum_i < min_sum:
+            min_sum = sum_i
+            min_tuple = i
+        print i
+    print min_tuple
+    return min_sum
+
+
+def p60_recurse_through(qualifying_primes, intersections, sub_primes_dict, qualifying_sets):
+    if len(qualifying_primes) >= 5:
+        qualifying_sets.add(qualifying_primes)
+    for prime in intersections:
+        if set(qualifying_primes).issubset(sub_primes_dict[prime]):
+            p60_recurse_through(qualifying_primes + (prime,),
+                                intersections.intersection(sub_primes_dict[prime]),
+                                sub_primes_dict,
+                                qualifying_sets)
+
+
+def p60_matches_requirement(prime_set, primes):
+    for i in prime_set:
+        for j in prime_set:
+            if i == j:
+                continue
+            if int(str(i) + str(j)) not in primes or int(str(j) + str(i)) not in primes:
+                print i, j
+                return False
+    return True
+>>>>>>> e9c47588a644c6857ab3dabe5cf2f2e471434e99
