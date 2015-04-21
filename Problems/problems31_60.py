@@ -14,6 +14,9 @@ from PrimeSet import PrimeSet
 
 
 
+
+
+
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -190,9 +193,9 @@ def p38():
 # b = k * (2*m*n)
 # c = m**2 + n**2
 # The conditions being:
-#   m > n
-#   m and n must be coprime
-#   m - n is odd
+# m > n
+# m and n must be coprime
+# m - n is odd
 #   k can be any integer
 # See: https://en.wikipedia.org/wiki/Pythagorean_triple
 # Instead of using a hashtable, I just used an array that used the index as a key. This takes up more space but given we
@@ -579,8 +582,7 @@ def p53():
     return over_million_count
 
 
-def p54_test(p1hand, p2hand):
-    return False
+import Poker
 
 
 def p54():
@@ -590,5 +592,5 @@ def p54():
             cards = line.split()
             p1hand = cards[0:5]
             p2hand = cards[5:10]
-            p1_wins += p54_test(p1hand, p2hand)
+            p1_wins += Poker.compare(p1hand, p2hand)
     return p1_wins

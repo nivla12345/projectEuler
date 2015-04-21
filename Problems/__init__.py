@@ -8,12 +8,12 @@ import Tools
 from PrimeSet import PrimeSet
 
 constant_iterations = 1
-# function_to_run = Tools.
-function_to_run = problems31_60.p53()
+function_to_run = Tools.prime_sieve_atkins(10000000)
+# function_to_run = problems31_60.p54()
 
 t0 = time.time()
 if constant_iterations == 1:
-    print function_to_run
+    print len(function_to_run)
 else:
     for i in xrange(constant_iterations - 1):
         function_to_run
