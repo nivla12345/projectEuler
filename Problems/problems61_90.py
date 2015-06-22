@@ -1,5 +1,6 @@
 __author__ = 'Alvin'
 
+from fractions import Fraction
 
 def p61_fill_dict(starting_n, diff, inc, lsd_dict, msd_dict):
     while starting_n < 10000:
@@ -75,3 +76,58 @@ def p61_find_cycle_set(octogonal_msd, this_msd, msd_dictionary_list, cyclic_tupl
                 next_msd = p61_get_lsd(value)
                 next_msd_dict_list = msd_dictionary_list[:dictionary_i] + msd_dictionary_list[dictionary_i + 1:]
                 p61_find_cycle_set(octogonal_msd, next_msd, next_msd_dict_list, cyclic_tuple + (value,), cycle_lists)
+
+
+# Given a Pell Equation, find the value of D that gives the maximum value of x for all minimal solutions.
+# The gist of this solution is using a neat property involving continued fractions solving Pell Equations:
+# The solution to the equation - "x**2 - d*y**2 = 1" - is Ak, Bk where k is the continued expansion of the continued
+# fraction representation of d**0.5
+def p66():
+    for i in xrange(2, 11):
+        # Check if perfect square, skip if it is
+        if int(i ** 0.5) ** 2 == i:
+            continue
+        # Get Akr, Bkr, and Ak2r, Bk2r
+        solutions = p66_continued_fraction(i)
+        Akr = solutions[0]
+        Bkr = solutions[1]
+        if Akr ** 2 - i * (Bkr ** 2) == 1:
+            print 'i: ', i, ' x = ', Akr, ' y = ', Bkr
+            continue
+        print 'i: ', i, ' x = ', solutions[2], ' y = ', solutions[3]
+    return
+
+
+# This function will
+def p66_continued_fraction(x):
+    solution = [0] * 4
+    a_list = []
+    m = 0
+    d = 1
+    a0 = int(x ** .5)
+    a = a0
+    a_list.append(a)
+    end_point = a0 << 1
+    # First we will fill up a_list with the first sequence of a's and double this list
+    while a != end_point:
+        m = d * a - m
+        d = (x - m ** 2) / d
+        a = int((a0 + m) / d)
+        a_list.append(a)
+    a_list_len = len(a_list)
+    #    if a_list_len < 3:
+    print a_list
+    running_continued_fraction = Fraction(a_list[a_list_len - 1])
+    # Create fraction Akr, Bkr
+    for i in xrange(a_list_len - 2, 1, -1):
+        running_continued_fraction = a_list[i] + 1 / running_continued_fraction
+    running_continued_fraction = a_list[0] + 1 / running_continued_fraction
+    solution[0] = running_continued_fraction.numerator
+    solution[1] = running_continued_fraction.denominator
+    running_continued_fraction2r = running_continued_fraction
+    for i in xrange(a_list_len - 2, 1, -1):
+        running_continued_fraction2r = a_list[i] + 1 / running_continued_fraction2r
+    running_continued_fraction2r = a_list[0] + 1 / running_continued_fraction2r
+    solution[2] = running_continued_fraction2r.numerator
+    solution[3] = running_continued_fraction2r.denominator
+    return solution
