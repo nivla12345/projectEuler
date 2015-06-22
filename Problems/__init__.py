@@ -14,12 +14,12 @@ result = None
 
 t0 = time.time()
 if constant_iterations == 1:
-    result = problems61_90.graph_problem()
+    result = problems61_90.p66()
     print result
 else:
     for i in xrange(constant_iterations - 1):
-        problems61_90.p61()
-    print problems61_90.p61()
+        problems61_90.p66()
+    print problems61_90.p66()
 t1 = time.time()
 
 print "time (s): ", t1 - t0
