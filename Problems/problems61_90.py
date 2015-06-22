@@ -1,6 +1,5 @@
 __author__ = 'Alvin'
 
-from fractions import Fraction
 
 def p61_fill_dict(starting_n, diff, inc, lsd_dict, msd_dict):
     while starting_n < 10000:
@@ -116,7 +115,12 @@ def p66_continued_fraction(x):
         a_list.append(a)
     a_list_len = len(a_list)
     #    if a_list_len < 3:
-    print a_list
+    #    print a_list
+
+    p0 = a0
+
+
+"""
     running_continued_fraction = Fraction(a_list[a_list_len - 1])
     # Create fraction Akr, Bkr
     for i in xrange(a_list_len - 2, 1, -1):
@@ -131,4 +135,5 @@ def p66_continued_fraction(x):
     running_continued_fraction2r_p1 = a_list[0] + 1 / running_continued_fraction2r_p1
     solution[2] = running_continued_fraction2r_p1.numerator
     solution[3] = running_continued_fraction2r_p1.denominator
+"""
     return solution
