@@ -1,4 +1,8 @@
 __author__ = 'Alvin'
+import math
+from fractions import Fraction
+
+import Tools
 
 
 def p61_fill_dict(starting_n, diff, inc, lsd_dict, msd_dict):
@@ -75,3 +79,49 @@ def p61_find_cycle_set(octogonal_msd, this_msd, msd_dictionary_list, cyclic_tupl
                 next_msd = p61_get_lsd(value)
                 next_msd_dict_list = msd_dictionary_list[:dictionary_i] + msd_dictionary_list[dictionary_i + 1:]
                 p61_find_cycle_set(octogonal_msd, next_msd, next_msd_dict_list, cyclic_tuple + (value,), cycle_lists)
+
+
+def p64_length(n):
+    a = int(math.sqrt(n))
+    a0 = a
+    d = 1
+    m = 0
+    a_set = []
+    while True:
+        m = d * a - m
+        d = (n - m ** 2) / d
+        a = (a0 + m) / d
+        if a == 2 * a0:
+            a_set.append(a)
+            return a_set
+        a_set.append(a)
+
+
+# Find the number of odd period length continued fraction representations for numbers under 10001
+def p64():
+    odd_period_count = 0
+    for i in xrange(2, 10001):
+        odd_period_count += (not Tools.is_perfect_square(i)) and (len(p64_length(i)) % 2)
+    return odd_period_count
+
+
+# Find the sum of the digits of the numerator of the continued fraction for the 100th term of e.
+def p65():
+    # Generate sequence
+    e_list = [1, 1, 1] * 33
+    e_list = e_list[:-1]
+    add_by = 1
+    for i in xrange(1, 100, 3):
+        e_list[i] += add_by
+        add_by += 2
+    running_fraction = Fraction(1, 1)
+    for i in reversed(e_list):
+        running_fraction += i
+        running_fraction = 1 / running_fraction
+    e = 2 + running_fraction
+    sum_numerator = 0
+    for i in str(e.numerator):
+        sum_numerator += int(i)
+    return sum_numerator
+
+

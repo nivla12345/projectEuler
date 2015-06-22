@@ -14,7 +14,7 @@ result = None
 
 t0 = time.time()
 if constant_iterations == 1:
-    result = problems61_90.p61()
+    result = problems61_90.graph_problem()
     print result
 else:
     for i in xrange(constant_iterations - 1):

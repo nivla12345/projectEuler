@@ -434,9 +434,6 @@ def simplify_fraction(a, b):
         b /= gcd
 
 
-from math import sqrt
-
-
 # Copied from: http://programmingpraxis.com/2010/02/19/sieve-of-atkin-improved/
 def prime_sieve_atkins(limit=1000000):
     """
@@ -515,6 +512,10 @@ def prime_sieve_atkins(limit=1000000):
             for k in range(n * n, limit, n * n):
                 primes[k] = False
     return [2, 3] + filter(primes.__getitem__, xrange(5, limit, 2))
+
+
+def is_perfect_square(n):
+    return int(n ** .5) ** 2 == n
 
 
 # #######################################################################################################################
