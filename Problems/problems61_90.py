@@ -1,5 +1,10 @@
 __author__ = 'Alvin'
 
+import math
+from fractions import Fraction
+
+import Tools
+
 
 def p61_fill_dict(starting_n, diff, inc, lsd_dict, msd_dict):
     while starting_n < 10000:
@@ -126,24 +131,23 @@ def p65():
 # The solution to the equation - "x**2 - d*y**2 = 1" - is Ak, Bk where k is the continued expansion of the continued
 # fraction representation of d**0.5
 def p66():
-    for i in xrange(2, 11):
+    max_d = 0
+    max_x = 0
+    for i in xrange(2, 1001):
         # Check if perfect square, skip if it is
         if int(i ** 0.5) ** 2 == i:
             continue
         # Get Akr, Bkr, and Ak2r, Bk2r
         solutions = p66_continued_fraction(i)
-        Akr = solutions[0]
-        Bkr = solutions[1]
-        if Akr ** 2 - i * (Bkr ** 2) == 1:
-            print 'i: ', i, ' x = ', Akr, ' y = ', Bkr
-            continue
-        print 'i: ', i, ' x = ', solutions[2], ' y = ', solutions[3]
-    return
+        x = solutions[0]
+        if x > max_x:
+            max_x = x
+            max_d = i
+    return max_d
 
 
 # This function will
 def p66_continued_fraction(x):
-    solution = [0] * 4
     a_list = []
     m = 0
     d = 1
@@ -151,33 +155,33 @@ def p66_continued_fraction(x):
     a = a0
     a_list.append(a)
     end_point = a0 << 1
-    # First we will fill up a_list with the first sequence of a's and double this list
+    # First we will fill up a_list with the first sequence of a's and double this list if we need to
     while a != end_point:
         m = d * a - m
         d = (x - m ** 2) / d
         a = int((a0 + m) / d)
         a_list.append(a)
     a_list_len = len(a_list)
-    #    if a_list_len < 3:
-    #    print a_list
-
-    p0 = a0
-
-
-"""
-    running_continued_fraction = Fraction(a_list[a_list_len - 1])
-    # Create fraction Akr, Bkr
-    for i in xrange(a_list_len - 2, 1, -1):
-        running_continued_fraction = a_list[i] + 1 / running_continued_fraction
-    running_continued_fraction = a_list[0] + 1 / running_continued_fraction
-    solution[0] = running_continued_fraction.numerator
-    solution[1] = running_continued_fraction.denominator
-    running_continued_fraction2r_p1 = Fraction(1, a_list[1])
-    for j in xrange(2):
-        for i in xrange(a_list_len - 2, 1, -1):
-            running_continued_fraction2r_p1 = a_list[i] + 1 / running_continued_fraction2r_p1
-    running_continued_fraction2r_p1 = a_list[0] + 1 / running_continued_fraction2r_p1
-    solution[2] = running_continued_fraction2r_p1.numerator
-    solution[3] = running_continued_fraction2r_p1.denominator
-"""
-    return solution
+    # Construct the convergence coefficients
+    r_len = a_list_len - 1
+    even = False
+    # If period is odd, we have to do more iterations and we need to extend the list being used accordingly
+    if a_list_len % 2 == 0:
+        even = True
+        for i in xrange(1, a_list_len):
+            a_list.append(a_list[i])
+        a_list.append(a_list[1])
+        r_len += a_list_len
+    # Calculate p and q solution
+    p = [0] * (r_len + 1)
+    q = [0] * (r_len + 1)
+    p[0] = a0
+    p[1] = a0 * a_list[1] + 1
+    q[0] = 1
+    q[1] = a_list[1]
+    for i in xrange(2, r_len + 1):
+        p[i] = a_list[i] * p[i - 1] + p[i - 2]
+        q[i] = a_list[i] * q[i - 1] + q[i - 2]
+    if even:
+        return p[a_list_len * 2 - 3], q[a_list_len * 2 - 3]
+    return p[a_list_len - 2], q[a_list_len - 2]
