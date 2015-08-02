@@ -113,27 +113,4 @@ def p66_continued_fraction(x):
         d = (x - m ** 2) / d
         a = int((a0 + m) / d)
         a_list.append(a)
-    a_list_len = len(a_list)
-    #    if a_list_len < 3:
-    #    print a_list
-
-    p0 = a0
-
-
-"""
-    running_continued_fraction = Fraction(a_list[a_list_len - 1])
-    # Create fraction Akr, Bkr
-    for i in xrange(a_list_len - 2, 1, -1):
-        running_continued_fraction = a_list[i] + 1 / running_continued_fraction
-    running_continued_fraction = a_list[0] + 1 / running_continued_fraction
-    solution[0] = running_continued_fraction.numerator
-    solution[1] = running_continued_fraction.denominator
-    running_continued_fraction2r_p1 = Fraction(1, a_list[1])
-    for j in xrange(2):
-        for i in xrange(a_list_len - 2, 1, -1):
-            running_continued_fraction2r_p1 = a_list[i] + 1 / running_continued_fraction2r_p1
-    running_continued_fraction2r_p1 = a_list[0] + 1 / running_continued_fraction2r_p1
-    solution[2] = running_continued_fraction2r_p1.numerator
-    solution[3] = running_continued_fraction2r_p1.denominator
-"""
     return solution
