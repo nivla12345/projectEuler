@@ -1,6 +1,7 @@
 __author__ = 'Alvin'
 
 import math
+import copy
 from fractions import Fraction
 
 import Tools
@@ -185,3 +186,136 @@ def p66_continued_fraction(x):
     if even:
         return p[a_list_len * 2 - 3], q[a_list_len * 2 - 3]
     return p[a_list_len - 2], q[a_list_len - 2]
+
+
+# Find the largest string for a 5-gon adding up to 16
+#
+# The unwrapped indices will look as follows:
+# graph index: 1 2 3 4 3 5 6 5 7 8 7 9 A 9 2
+# index      : 0 1 2 3 4 5 6 7 8 9 A B C D E
+# inner node :   i i   i i   i i   i i   i i
+#
+# This algorithm will work as follows:
+#   0) Identify the element 1 by iterating from [6:1]. Remove
+#
+#   1) Using element 1 as an anchor, iterate over the permutation of the remaining available numbers and fill in element
+#      2 and 3. At this point, we have identified the sum that can be used. We exclude 10 (*Note 10).
+#
+#   2) We will subtract the respective inner node from the current_sum and select from the remaining permutations.
+#      This will be continued until the graph has been filled. If we iterate to the end, we jump back to 1).
+#
+#   3) If at any point in 2), there are no more valid digits, we return with no conclusive result and jump back to step
+#      2). If we are able to fill out the graph in a valid manner, then the first answer we see is the correct answer
+#      and we may halt the algorithm.
+#
+# An overview of the algorithm is that we work backwards from the largest possible combination of numbers to the first
+# feasible 5-gon and that is our answer.
+#
+# Note 0: 10 cannot be an inner node otherwise it violates the 16 digit constraint.
+#
+# Running parameters:
+# - Available digits == available_digits (bit array represented as an integer)
+# - Current sum      == current_sum (int)
+# - Current graph    == concatenated_graph (list)
+# - Current index    == graph_index (int)
+#
+def p68():
+    num_digits = 9
+
+    for i in xrange(6, 0, -1):
+        # Construct available_digits and remove the first node.
+        available_digits = range(num_digits, 0, -1)
+        del available_digits[num_digits - i]
+
+        # Construct the current graph with the respective first elements in place.
+        current_graph = [0] * 0xF
+        current_graph[0] = i
+        potential_answer = p68_construct_first_edge(available_digits, current_graph)
+        if potential_answer:
+            return potential_answer
+    return []
+
+
+# Here, we perform step 1) of the algorithm. We permute over the available_digits to find all candidates for elements 2
+# and 3.
+def p68_construct_first_edge(available_digits, current_graph):
+    # How we got to 8 is we start with 10 available digits and subtract 1 for element 1 being used and subtract another
+    # for how we can't use 10 (*Note 1).
+    n_available_digits = 8
+
+    # Hard code in the permutations as opposed to recursively generating only 2 permutations.
+    for i in xrange(n_available_digits):
+        # Select element 2
+        element2 = available_digits[i]
+        current_graph[1] = element2
+        current_graph[-1] = element2
+
+        # Construct latest available digits to use minus element 2.
+        available_digits_e2 = copy.deepcopy(available_digits)
+        del available_digits_e2[i]
+        len_e2 = len(available_digits_e2)
+
+        for j in xrange(len_e2):
+            # Select element 3
+            element3 = available_digits_e2[j]
+            current_graph[2] = element3
+            current_graph[4] = element3
+
+            # Construct latest available digits to use minus element 3.
+            available_digits_e3 = copy.deepcopy(available_digits_e2)
+            del available_digits_e3[j]
+
+            # Prepare to construct the remaining graph.
+            current_sum = element2 + element3 + current_graph[0]
+            graph_result = p68_construct_remaining_graph(current_sum, [10] + available_digits_e3, current_graph, 3)
+            if graph_result:
+                return graph_result
+    return []
+
+
+# At this point, we have the target sum, the available_digits, the graph with the appropriate digits, and the index to
+# start from.
+def p68_construct_remaining_graph(current_sum, available_digits, current_graph, current_index):
+    # Base case we have a successful case
+    if current_index == 0xC:
+        last_digit = available_digits[0]
+        # We have a successful graph.
+        if (last_digit + current_graph[0xD] + current_graph[0xE]) == current_sum:
+            current_graph[0xC] = last_digit
+            return current_graph
+        return []
+
+    # Identify the remaining difference that needs to be filled to complete the graph.
+    remaining_sum = current_sum - current_graph[current_index - 1]
+    n_available_digits = len(available_digits)
+
+    # Identify the outer node and consequently the inner node.
+    for i in xrange(n_available_digits):
+        outer_node = available_digits[i]
+        if outer_node < current_graph[0]:
+            continue
+
+        # Perform checks on potential inner node
+        potential_inner_node = remaining_sum - outer_node
+
+        if potential_inner_node == outer_node or \
+                        potential_inner_node not in available_digits or \
+                        potential_inner_node == 10 or \
+                        potential_inner_node > available_digits[0] or \
+                        potential_inner_node <= 0:
+            continue
+
+        # Construct new available list
+        available_digits_outer = copy.deepcopy(available_digits)
+        del available_digits_outer[i]
+        available_digits_outer.remove(potential_inner_node)
+
+        # Update graph; no need to create a copy of the graph because the respective values will be written over.
+        current_graph[current_index] = outer_node
+        current_graph[current_index + 2] = potential_inner_node
+        current_graph[current_index + 4] = potential_inner_node
+
+        result = p68_construct_remaining_graph(current_sum, available_digits_outer, current_graph, current_index + 3)
+        if result:
+            return result
+    return []
