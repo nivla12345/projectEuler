@@ -319,3 +319,22 @@ def p68_construct_remaining_graph(current_sum, available_digits, current_graph, 
         if result:
             return result
     return []
+
+
+ONE_MILLION = 1000000
+
+
+# Find the value n with the largest Totient quotient
+# The planned algorithm:
+# Use Euler's product formula to compute the Totient function.
+# Euler's product formula works as follows:
+#   Given a number n, take the product of the following:
+#       (1 - 1/p)
+#   Where p is the list of primes dividing n.
+#   Multiply this quantity by n.
+#
+#   To calculate the p list, I will generate a list of primes which I will iterate through to determine whether the
+#   number is divisible by. I will stop iterating when the given prime is larger than the number being compared against.
+def p69():
+    n = ONE_MILLION + 1
+    return
