@@ -82,7 +82,7 @@ def p61_find_cycle_set(octogonal_msd, this_msd, msd_dictionary_list, cyclic_tupl
                 next_msd_dict_list = msd_dictionary_list[:dictionary_i] + msd_dictionary_list[dictionary_i + 1:]
                 p61_find_cycle_set(octogonal_msd, next_msd, next_msd_dict_list, cyclic_tuple + (value,), cycle_lists)
 
-            
+
 def p64_length(n):
     a = int(math.sqrt(n))
     a0 = a
@@ -321,20 +321,17 @@ def p68_construct_remaining_graph(current_sum, available_digits, current_graph, 
     return []
 
 
-ONE_MILLION = 1000000
+# Find the largest value for n = [1:1M] s.t. n / totient(n) is a maximum.
+MILLION = 1000000
 
 
-# Find the value n with the largest Totient quotient
-# The planned algorithm:
-# Use Euler's product formula to compute the Totient function.
-# Euler's product formula works as follows:
-#   Given a number n, take the product of the following:
-#       (1 - 1/p)
-#   Where p is the list of primes dividing n.
-#   Multiply this quantity by n.
-#
-#   To calculate the p list, I will generate a list of primes which I will iterate through to determine whether the
-#   number is divisible by. I will stop iterating when the given prime is larger than the number being compared against.
 def p69():
-    n = ONE_MILLION + 1
-    return
+    primes = Tools.prime_sieve_atkins(100)
+    current_product = primes[0]
+    current_prime = primes[1]
+    index = 1
+    while current_product <= MILLION:
+        current_prime = primes[index]
+        current_product *= current_prime
+        index += 1
+    return current_product / current_prime
