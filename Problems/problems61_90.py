@@ -322,16 +322,72 @@ def p68_construct_remaining_graph(current_sum, available_digits, current_graph, 
 
 
 # Find the largest value for n = [1:1M] s.t. n / totient(n) is a maximum.
-MILLION = 1000000
-
-
+# Ultimately, find the largest product of consecutive prime factors that is less than 1M
 def p69():
+    million = 1000000
     primes = Tools.prime_sieve_atkins(100)
     current_product = primes[0]
     current_prime = primes[1]
     index = 1
-    while current_product <= MILLION:
+    while current_product <= million:
         current_prime = primes[index]
         current_product *= current_prime
         index += 1
     return current_product / current_prime
+
+
+# Find the n s.t. n/totient(n) is a minimum while totient(n) is a permutation of n.
+# My solution was to generate products of pairs of primes and to search for an optimal totient result.
+#
+# Further optimization:
+# This can actually be further optimized by searching for prime factors nearer sqrt(10M). However, I'm not very keen on
+# guessing a window that would fit just right around the sqrt(10M) while at the same time I was too lazy to write a
+# program that would dynamically expand the window should searching within too small a window failed.
+def p70():
+    upper_bound_ten_million = 10000000
+    # Generate a sorted list of products of primes.
+    primes = Tools.prime_sieve_atkins(upper_bound_ten_million >> 1)
+    prime_set = set(primes)
+    product_primes = []
+    num_primes = len(primes)
+    for i in xrange(1, num_primes):
+        i_val = primes[i]
+        for j in xrange(i, num_primes):
+            j_val = primes[j]
+            current_index = i_val * j_val
+            if current_index > upper_bound_ten_million:
+                break
+            product_primes.append(current_index)
+    product_primes.sort()
+
+    # Iterate through the reverse of the product list to find the maximum totient value
+    min_n_over_totient = 1.1
+    min_index = 0
+    for i in reversed(product_primes):
+        current_totient = p70_totient(i, primes, prime_set)
+        n_over_totient = float(i) / current_totient
+        if min_n_over_totient > n_over_totient and Tools.is_permutation(current_totient, i):
+            min_n_over_totient = n_over_totient
+            min_index = i
+    return min_index
+
+
+# Uses euler's product formula to calculate the totient function.
+# Euler's product formula:
+# n * product((p - 1)/p) where p is are the primes that are <= n.
+def p70_totient(n, primes, prime_set):
+    tmp_n = n
+    n_sqrt = int(n ** 0.5) + 1
+    running_denominator = 1
+    running_numerator = 1
+    for i in primes:
+        if i > n_sqrt:
+            break
+        if n % i == 0:
+            running_numerator *= (i - 1)
+            running_denominator *= i
+            r = n / i
+            if r in prime_set:
+                running_numerator *= (r - 1)
+                running_denominator *= r
+    return tmp_n * running_numerator / running_denominator

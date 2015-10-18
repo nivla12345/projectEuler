@@ -7,7 +7,6 @@ from contracts import pre_condition
 from contracts import post_condition
 from memoize import Memoize
 
-
 PHI = (1 + math.sqrt(5)) / 2
 ALL_DIGITS = string.digits + string.letters
 
@@ -516,6 +515,10 @@ def prime_sieve_atkins(limit=1000000):
 
 def is_perfect_square(n):
     return int(n ** .5) ** 2 == n
+
+
+def is_permutation(n, m):
+    return sorted(str(n)) == sorted(str(m))
 
 
 # #######################################################################################################################
