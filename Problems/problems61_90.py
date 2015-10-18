@@ -358,12 +358,11 @@ def p70():
             if current_index > upper_bound_ten_million:
                 break
             product_primes.append(current_index)
-    product_primes.sort()
 
-    # Iterate through the reverse of the product list to find the maximum totient value
+    # Iterate through the product list to find the maximum totient value
     min_n_over_totient = 1.1
     min_index = 0
-    for i in reversed(product_primes):
+    for i in product_primes:
         current_totient = p70_totient(i, primes, prime_set)
         n_over_totient = float(i) / current_totient
         if min_n_over_totient > n_over_totient and Tools.is_permutation(current_totient, i):
@@ -391,3 +390,22 @@ def p70_totient(n, primes, prime_set):
                 running_numerator *= (r - 1)
                 running_denominator *= r
     return tmp_n * running_numerator / running_denominator
+
+
+# Multiply numbers [1:1M] by 3.0/7 and check the upper round vs. lower round distance away from 3/7
+def p71():
+    million = 1000000
+    three_over_seven = 3.0 / 7
+    closest_numerator = 0
+    delta = 10  # arbitrarily chosen large value
+    # Set to 8 to skip 7 which is the base case. Will perform separate check if this isn't right.
+    for i in xrange(3, million + 1):
+        if i % 7 == 0:
+            continue
+        current_numerator = int(three_over_seven * i)
+        current_value = float(current_numerator) / i
+        current_delta = three_over_seven - current_value
+        if current_delta < delta:
+            delta = current_delta
+            closest_numerator = current_numerator
+    return closest_numerator
