@@ -425,3 +425,32 @@ def p72():
     for i in xrange(2, upper_limit + 1):
         count += p70_totient(i, prime_set)
     return count
+
+
+def p75():
+    upper_limit = 1500000
+    # This is derived from adding together a, b, and c yielding an approximation of: upper_limit > 2m**2
+    # This is a conservative estimate as we assume n is zero.
+    upper_m_bound = int((upper_limit >> 1) ** 0.5)
+    perimeter_dict = dict()
+    # This bound was derived given m = 31 would yield an a + b + c > 1000
+    for m in xrange(2, upper_m_bound):
+        # Iterating up to m satisfies the m > n condition
+        m_minus_n_odd = m & 1
+        for n in xrange(1 + m_minus_n_odd, m, 2):
+            if Tools.euclid_gcd(m, n) != 1:
+                continue
+            a = m * m - n * n
+            b = 2 * m * n
+            c = m * m + n * n
+            perimeter = a + b + c
+            if perimeter > upper_limit:
+                break
+            base_perimeter = perimeter
+            while perimeter <= upper_limit:
+                perimeter_dict[perimeter] = perimeter_dict.get(perimeter, 0) + 1
+                perimeter += base_perimeter
+    count = 0
+    for value in perimeter_dict.itervalues():
+        count += (value == 1)
+    return count
