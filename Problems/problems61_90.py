@@ -345,7 +345,7 @@ def p69():
 # program that would dynamically expand the window should searching within too small a window failed.
 def p70():
     upper_bound_ten_million = 10000000
-    # Generate a sorted list of products of primes.
+    # Generate a list of products of primes.
     primes = Tools.prime_sieve_atkins(upper_bound_ten_million >> 1)
     prime_set = set(primes)
     product_primes = []
@@ -375,21 +375,20 @@ def p70():
 # Euler's product formula:
 # n * product((p - 1)/p) where p is are the primes that are <= n.
 def p70_totient(n, primes, prime_set):
-    tmp_n = n
-    n_sqrt = int(n ** 0.5) + 1
+    orig_n = n
+    limit = int(n ** 0.5)
+    if n in prime_set:
+        return n - 1
     running_denominator = 1
     running_numerator = 1
     for i in primes:
-        if i > n_sqrt:
+        if i > n:
             break
         if n % i == 0:
             running_numerator *= (i - 1)
             running_denominator *= i
-            r = n / i
-            if r in prime_set:
-                running_numerator *= (r - 1)
-                running_denominator *= r
-    return tmp_n * running_numerator / running_denominator
+            n /= i
+    return orig_n * running_numerator / running_denominator
 
 
 # Multiply numbers [1:1M] by 3.0/7 and check the upper round vs. lower round distance away from 3/7
@@ -409,3 +408,16 @@ def p71():
             delta = current_delta
             closest_numerator = current_numerator
     return closest_numerator
+
+
+# Count the number of coprime elements under 1M
+# My solution sums up the totient functions from [2:1M]
+def p72():
+    upper_limit = 100000
+    # Generate a sorted list of products of primes.
+    primes = Tools.prime_sieve_atkins(upper_limit)
+    prime_set = set(primes)
+    count = 0
+    for i in xrange(2, upper_limit + 1):
+        count += p70_totient(i, primes, prime_set)
+    return count

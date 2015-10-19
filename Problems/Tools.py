@@ -638,3 +638,38 @@ def prime_sieve_atkins(limit=1000000):
             for k in range(n * n, limit, n * n):
                 primes[k] = False
     return [2, 3] + filter(primes.__getitem__, xrange(5, limit, 2))
+
+
+# The code below is a snippet of how to generate all the co-primes. Unfortunately its so damn slow that I never get to
+# use it.
+"""
+    count = 2
+    m = [2, 3]
+    n = [1, 1]
+    while m:
+        new_m = []
+        new_n = []
+        for i, m_val in enumerate(m):
+            n_val = n[i]
+            two_m = m_val << 1
+            # branch 1
+            potential_value = two_m - n_val
+            if potential_value <= upper_limit:
+                new_m += [potential_value]
+                new_n += [m_val]
+                count += 1
+            # branch 2
+            potential_value = two_m + n_val
+            if potential_value <= upper_limit:
+                new_m += [potential_value]
+                new_n += [m_val]
+                count += 1
+            # branch 3
+            potential_value = m_val + (n_val << 1)
+            if potential_value <= upper_limit:
+                new_m += [potential_value]
+                new_n += [n_val]
+                count += 1
+        m = new_m
+        n = new_n
+"""
