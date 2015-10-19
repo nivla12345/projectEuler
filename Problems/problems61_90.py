@@ -363,7 +363,7 @@ def p70():
     min_n_over_totient = 1.1
     min_index = 0
     for i in product_primes:
-        current_totient = p70_totient(i, primes, prime_set)
+        current_totient = p70_totient(i, prime_set)
         n_over_totient = float(i) / current_totient
         if min_n_over_totient > n_over_totient and Tools.is_permutation(current_totient, i):
             min_n_over_totient = n_over_totient
@@ -374,21 +374,25 @@ def p70():
 # Uses euler's product formula to calculate the totient function.
 # Euler's product formula:
 # n * product((p - 1)/p) where p is are the primes that are <= n.
-def p70_totient(n, primes, prime_set):
-    orig_n = n
-    limit = int(n ** 0.5)
+def p70_totient(n, prime_set):
+    limit = int(n ** 0.5) + 1
     if n in prime_set:
         return n - 1
     running_denominator = 1
     running_numerator = 1
-    for i in primes:
-        if i > n:
+    n_is_odd = n & 1
+    for i in xrange(2 + n_is_odd, limit, 1 + n_is_odd):
+        if i > limit:
             break
         if n % i == 0:
-            running_numerator *= (i - 1)
-            running_denominator *= i
-            n /= i
-    return orig_n * running_numerator / running_denominator
+            r = n / i
+            if i in prime_set:
+                running_numerator *= (i - 1)
+                running_denominator *= i
+            if r in prime_set and r != i:
+                running_numerator *= (r - 1)
+                running_denominator *= r
+    return n * running_numerator / running_denominator
 
 
 # Multiply numbers [1:1M] by 3.0/7 and check the upper round vs. lower round distance away from 3/7
@@ -413,11 +417,11 @@ def p71():
 # Count the number of coprime elements under 1M
 # My solution sums up the totient functions from [2:1M]
 def p72():
-    upper_limit = 100000
+    upper_limit = 1000000
     # Generate a sorted list of products of primes.
     primes = Tools.prime_sieve_atkins(upper_limit)
     prime_set = set(primes)
     count = 0
     for i in xrange(2, upper_limit + 1):
-        count += p70_totient(i, primes, prime_set)
+        count += p70_totient(i, prime_set)
     return count
