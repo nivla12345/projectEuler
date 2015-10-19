@@ -204,7 +204,7 @@ def p39():
     for m in xrange(2, 32):
         # Iterating up to m satisfies the m > n condition
         m_minus_n_odd = m % 2
-        for n in xrange(1 + m_minus_n_odd % 2, m, 2):
+        for n in xrange(1 + m_minus_n_odd, m, 2):
             if Tools.euclid_gcd(m, n) != 1:
                 continue
             a = m * m - n * n
