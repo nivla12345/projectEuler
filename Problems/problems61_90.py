@@ -427,25 +427,31 @@ def p72():
     return count
 
 
+# Find all unique fractions between 1/3 and 1/2.
 def p73():
     upper_limit = 12000
-    fraction_set = set()
+    count = 0
     lower_fraction = Fraction(1, 3)
     upper_fraction = Fraction(1, 2)
-    lower_decimal = 1.0 / 3
+    lower_decimal_bound = 1.0 / 3
+    upper_decimal_bound = 0.5
     for d in xrange(5, upper_limit + 1):
-        current_lower_numerator = int(math.ceil(lower_decimal * d))
+        current_lower_numerator = int(math.ceil(lower_decimal_bound * d))
         current_lower_fraction = Fraction(current_lower_numerator, d)
         if current_lower_fraction == lower_fraction:
             current_lower_numerator += 1
-            current_lower_fraction = Fraction(current_lower_numerator, d)
-        while current_lower_fraction < upper_fraction:
-            fraction_set.add(current_lower_fraction)
+        current_upper_numerator = int(upper_decimal_bound * d)
+        current_upper_fraction = Fraction(current_upper_numerator, d)
+        if current_upper_fraction == upper_fraction:
+            current_upper_numerator -= 1
+        while current_lower_numerator <= current_upper_numerator:
+            count += (Tools.euclid_gcd(current_lower_numerator, d) == 1)
             current_lower_numerator += 1
-            current_lower_fraction = Fraction(current_lower_numerator, d)
-    return len(fraction_set)
+    return count
 
 
+# Find the number of integer perimeters (beneath 1.5M) that yield right angle integer sides.
+# Uses a pythagorean generator + euclid gcd to check for co-primality.
 def p75():
     upper_limit = 1500000
     # This is derived from adding together a, b, and c yielding an approximation of: upper_limit > 2m**2
