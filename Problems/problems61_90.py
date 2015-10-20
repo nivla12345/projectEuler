@@ -427,6 +427,25 @@ def p72():
     return count
 
 
+def p73():
+    upper_limit = 12000
+    fraction_set = set()
+    lower_fraction = Fraction(1, 3)
+    upper_fraction = Fraction(1, 2)
+    lower_decimal = 1.0 / 3
+    for d in xrange(5, upper_limit + 1):
+        current_lower_numerator = int(math.ceil(lower_decimal * d))
+        current_lower_fraction = Fraction(current_lower_numerator, d)
+        if current_lower_fraction == lower_fraction:
+            current_lower_numerator += 1
+            current_lower_fraction = Fraction(current_lower_numerator, d)
+        while current_lower_fraction < upper_fraction:
+            fraction_set.add(current_lower_fraction)
+            current_lower_numerator += 1
+            current_lower_fraction = Fraction(current_lower_numerator, d)
+    return len(fraction_set)
+
+
 def p75():
     upper_limit = 1500000
     # This is derived from adding together a, b, and c yielding an approximation of: upper_limit > 2m**2
