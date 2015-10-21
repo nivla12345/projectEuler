@@ -54,15 +54,35 @@ def num_divisors(n):
         return 2
     divisor_count = 0
     n_root = int(math.sqrt(n))
-    inc_by = 1
-    if n % 2 != 0:
-        inc_by = 2
+    inc_by = 1 + (n & 1)
     if (n_root * n_root) == n:
         divisor_count = 1
+    else:
+        n_root += 1
     for i in xrange(1, n_root, inc_by):
         if n % i == 0:
             divisor_count += 2
     return divisor_count
+
+
+def get_divisors(n):
+    divisors = []
+    if n <= 0:
+        return 0
+    if n <= 1:
+        return [1]
+    if n <= 3:
+        return [1, 2]
+    n_root = int(math.sqrt(n))
+    inc_by = 1 + (n & 1)
+    if (n_root * n_root) == n:
+        divisors += [n_root]
+    else:
+        n_root += 1
+    for i in xrange(1, n_root, inc_by):
+        if n % i == 0:
+            divisors += [i, n/i]
+    return sorted(divisors)
 
 
 # Returns the sum of distinct factors
