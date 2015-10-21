@@ -45,38 +45,73 @@ def p500():
     mod_by = 500500507
     upper_limit = 500500
 
+    # Refers to the current head/tail index. Will always be 0.
+    tail = 0
+    head = 4
+    # Next and previous index
+    next_index = 1
+    previous_index = 0
+
     # Generate base divisors
-    hard_coded_initial_seive_size = 1327503
-    #hard_coded_initial_seive_size = 5
-    divisor_list = [False] * hard_coded_initial_seive_size
-    divisor_list[0] = True
-    base_divisor_stack = [2]
+    hard_coded_initial_seive_size = 7370028
+    # hard_coded_initial_seive_size = 40
+
+    # Divisor list is the sieve that indicates whether a data point has been marked or not.
+    #   - Each element will be represented as [previous, next]
+    divisor_list = [0] * hard_coded_initial_seive_size
+    divisor_list[0] = [None, 1]
+    divisor_list[1] = [0, 4]
+    divisor_list[4] = [1, -1]
+    base_divisor_stack = [2, 3]
+
     # Perform sieve
-    for i in xrange(1, hard_coded_initial_seive_size):
+    for i in xrange(2, hard_coded_initial_seive_size):
         if not divisor_list[i]:
             current_divisor = i + 2
-            divisor_list[i] = True
+
+            # Will contain the indexes to add to the divisor_list
+            to_add_values = [i]
+            current_track_index = tail
 
             # Look through previous base divisors, create combinations and multiply
-            for base_divisor in base_divisor_stack:
-                base_divisor_index = (base_divisor * current_divisor) - 2
-                if base_divisor_index >= hard_coded_initial_seive_size:
+            while current_track_index >= 0:
+                divisor_value = current_track_index + 2
+                look_ahead_index = (current_divisor * divisor_value) - 2
+                if look_ahead_index >= hard_coded_initial_seive_size:
                     break
-                divisor_list[base_divisor_index] = True
+                to_add_values += [look_ahead_index]
+                current_track_index = divisor_list[current_track_index][next_index]
 
+            # Add to the base divisor stack.
             base_divisor_stack.append(current_divisor)
-            # Done sieving
-            if len(base_divisor_stack) >= upper_limit:
-                # This line was used to obtain the hard_code_initial_seive_size...
-                # print i
-                break
 
-    # product = 1
-    # for i in base_divisor_stack:
-    #     product *= i
-    # print len(base_divisor_stack)
-    # print base_divisor_stack
-    # print product
+            # Properly assign head index. If we have a new larger value we have a neww larger head
+            potential_head_index = to_add_values[-1]
+            if head <= potential_head_index:
+                # Assign next value for previous head
+                divisor_list[head][next_index] = potential_head_index
+                # Assign new head previous pointer
+                divisor_list[potential_head_index] = [head, -1]
+                # Assign new head index
+                head = potential_head_index
+                # Remove head from the values to add
+                to_add_values.pop()
+
+            # Add the values to the divisor_list.
+            while to_add_values:
+                current_index = to_add_values.pop()
+
+                # Find previous index
+                running_index = current_index
+                while not divisor_list[running_index] and running_index != tail:
+                    running_index -= 1
+
+                current_next_index = divisor_list[running_index][next_index]
+                divisor_list[current_index] = [None, None]
+                divisor_list[current_index][previous_index] = running_index
+                divisor_list[current_index][next_index] = current_next_index
+                divisor_list[running_index][next_index] = current_index
+                divisor_list[current_next_index][previous_index] = current_index
 
     # Iterate over the base divisors and obtain the modulus
     mod_track = 1
