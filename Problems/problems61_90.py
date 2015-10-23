@@ -1,10 +1,10 @@
-__author__ = 'Alvin'
-
 import math
 import copy
 from fractions import Fraction
 
 import Tools
+
+__author__ = 'Alvin'
 
 
 def p61_fill_dict(starting_n, diff, inc, lsd_dict, msd_dict):

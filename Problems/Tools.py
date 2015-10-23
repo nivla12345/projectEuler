@@ -660,6 +660,27 @@ def prime_sieve_atkins(limit=1000000):
     return [2, 3] + filter(primes.__getitem__, xrange(5, limit, 2))
 
 
+def totient_function(n, prime_set):
+    limit = int(n ** 0.5) + 1
+    if n in prime_set:
+        return n - 1
+    running_denominator = 1
+    running_numerator = 1
+    n_is_odd = n & 1
+    for i in xrange(2 + n_is_odd, limit, 1 + n_is_odd):
+        if i > limit:
+            break
+        if n % i == 0:
+            r = n / i
+            if i in prime_set:
+                running_numerator *= (i - 1)
+                running_denominator *= i
+            if r in prime_set and r != i:
+                running_numerator *= (r - 1)
+                running_denominator *= r
+    return n * running_numerator / running_denominator
+
+
 # The code below is a snippet of how to generate all the co-primes. Unfortunately its so damn slow that I never get to
 # use it.
 """

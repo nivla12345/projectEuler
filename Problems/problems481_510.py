@@ -1,8 +1,5 @@
 __author__ = 'alvinmao'
 
-import math
-import Tools
-
 
 # Given the smallest number with 1 << 500500 divisors (n). Find n % 500500507.
 #
