@@ -681,6 +681,25 @@ def totient_function(n, prime_set):
     return n * running_numerator / running_denominator
 
 
+def totient_function(n):
+    limit = int(n ** 0.5) + 1
+    running_denominator = 1
+    running_numerator = 1
+    n_is_odd = n & 1
+    for i in xrange(2 + n_is_odd, limit, 1 + n_is_odd):
+        if i > limit:
+            break
+        if n % i == 0:
+            r = n / i
+            if is_prime(i):
+                running_numerator *= (i - 1)
+                running_denominator *= i
+            if is_prime(r) and r != i:
+                running_numerator *= (r - 1)
+                running_denominator *= r
+    return n * running_numerator / running_denominator
+
+
 # The code below is a snippet of how to generate all the co-primes. Unfortunately its so damn slow that I never get to
 # use it.
 """
