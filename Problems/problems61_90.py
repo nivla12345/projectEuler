@@ -450,6 +450,44 @@ def p73():
     return count
 
 
+def p74_chain_length(n, target_chain_len, dict_of_lengths):
+    running_chain = [n]
+    track_set = set(running_chain)
+    current_sum = Tools.sum_of_factorial_digits(n)
+    current_len = len(track_set)
+    while current_len < (target_chain_len + 1):
+        before_add_len = len(track_set)
+        track_set.add(current_sum)
+        current_len = len(track_set)
+
+        # A cycle has been seen, just stop.
+        if current_len == before_add_len:
+            dict_of_lengths[n] = current_len
+            return current_len == target_chain_len
+
+        # Update the current_sum and the running_chain
+        running_chain.append(current_sum)
+        current_sum = Tools.sum_of_factorial_digits(current_sum)
+
+        # If the newly calculated factorial digits is in the dictionary of lengths, we are satisfied.
+        if current_sum in dict_of_lengths:
+            smart_length = current_len + dict_of_lengths[current_sum]
+            dict_of_lengths[n] = smart_length
+            return smart_length == target_chain_len
+    dict_of_lengths[n] = target_chain_len
+    return False
+
+
+def p74():
+    upper_limt = 1000001
+    sixty_count = 0
+    target_chain_len = 60
+    dict_of_lengths = dict()
+    for i in xrange(3, upper_limt):
+        sixty_count += p74_chain_length(i, target_chain_len, dict_of_lengths)
+    return sixty_count
+
+
 # Find the number of integer perimeters (beneath 1.5M) that yield right angle integer sides.
 # Uses a pythagorean generator + euclid gcd to check for co-primality.
 def p75():

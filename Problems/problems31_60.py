@@ -9,12 +9,6 @@ from TwiceSquareSet import TwiceSquareSet
 from PrimeSet import PrimeSet
 
 
-
-
-
-
-
-
 # The problems that aren't in here were simple enough to do in the python command line.
 
 
@@ -105,7 +99,7 @@ def p34():
     maximum_possible_number = 7 * math.factorial(9)
     sum_of_qualifying_numbers = 0
     for i in xrange(10, maximum_possible_number):
-        if Tools.permutation_sum_of_digits(i) == i:
+        if Tools.sum_of_factorial_digits(i) == i:
             sum_of_qualifying_numbers += i
     return sum_of_qualifying_numbers
 

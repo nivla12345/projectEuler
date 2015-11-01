@@ -239,7 +239,7 @@ permutation_sum_of_digits_factorials = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 3
 
 @pre_condition(lambda n: type(n) is int)
 @post_condition(lambda ret: type(ret) is int and ret > 0)
-def permutation_sum_of_digits(n):
+def sum_of_factorial_digits(n):
     if n == 0:
         return 1
     n = abs(n)
