@@ -460,9 +460,12 @@ def p74_chain_length(n, target_chain_len, dict_of_lengths):
         track_set.add(current_sum)
         current_len = len(track_set)
 
-        # A cycle has been seen, just stop.
+        # A cycle has been seen, just stop and record chain
         if current_len == before_add_len:
-            dict_of_lengths[n] = current_len
+            count = 1
+            while running_chain:
+                dict_of_lengths[running_chain.pop()] = count
+                count += 1
             return current_len == target_chain_len
 
         # Update the current_sum and the running_chain
