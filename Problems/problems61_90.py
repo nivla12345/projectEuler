@@ -522,3 +522,6 @@ def p75():
     return count
 
 
+def p76():
+    return Tools.int_partition(100)
+

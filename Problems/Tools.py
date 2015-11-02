@@ -81,7 +81,7 @@ def get_divisors(n):
         n_root += 1
     for i in xrange(1, n_root, inc_by):
         if n % i == 0:
-            divisors += [i, n/i]
+            divisors += [i, n / i]
     return sorted(divisors)
 
 
@@ -698,6 +698,26 @@ def totient_function(n):
                 running_numerator *= (r - 1)
                 running_denominator *= r
     return n * running_numerator / running_denominator
+
+
+def int_partition_r(n, m):
+    if n == 0:
+        return 1
+    partition_sum = 0
+    for i in xrange(1, m + 1):
+        sub_n = n - i
+        if sub_n < 0:
+            return partition_sum
+        partition_sum += int_partition_r(sub_n, i)
+    return partition_sum
+
+
+int_partition_r = Memoize(int_partition_r)
+
+
+# Performs an integer partition.
+def int_partition(n):
+    return int_partition_r(n, n)
 
 
 # The code below is a snippet of how to generate all the co-primes. Unfortunately its so damn slow that I never get to
