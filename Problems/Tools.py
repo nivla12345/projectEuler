@@ -720,6 +720,40 @@ def int_partition(n):
     return int_partition_r(n, n)
 
 
+UP_TO_MILLION_PRIMES = prime_sieve_atkins()
+
+
+def prime_int_partition_r(n, m):
+    if n == 0:
+        return 1
+    partition_sum = 0
+    for i in UP_TO_MILLION_PRIMES:
+        if i > m:
+            return partition_sum
+        sub_n = n - i
+        if sub_n < 0:
+            return partition_sum
+        partition_sum += prime_int_partition_r(sub_n, i)
+    print "I need a larger prime set."
+    return partition_sum
+
+
+prime_int_partition_r = Memoize(prime_int_partition_r)
+
+
+# Performs an integer partition.
+def prime_int_partition(n):
+    return prime_int_partition_r(n, n)
+
+
+root_3 = 3.0 ** 0.5
+two_thirds = 2.0/3
+
+
+def int_partition_approximation(n):
+    return int((1/((n << 2) * root_3)) * math.exp(math.pi * (two_thirds * n) ** 0.5))
+
+
 # The code below is a snippet of how to generate all the co-primes. Unfortunately its so damn slow that I never get to
 # use it.
 """

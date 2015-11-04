@@ -525,3 +525,11 @@ def p75():
 def p76():
     return Tools.int_partition(100)
 
+
+def p77():
+    count = 2
+    while True:
+        num_prime_partitions = Tools.prime_int_partition(count)
+        if num_prime_partitions > 5000:
+            return count
+        count += 1
