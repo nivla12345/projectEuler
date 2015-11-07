@@ -2,6 +2,7 @@ __author__ = 'Alvin'
 
 import math
 import string
+from math import sqrt
 
 from contracts import pre_condition
 from contracts import post_condition
@@ -28,7 +29,6 @@ def fibonacci(n):
 
 def is_prime(x):
     """
-
     :rtype : returns a boolean
     """
     if x <= 1:
@@ -211,6 +211,15 @@ def generic_ways_to_make_target(target, args):
 
 
 generic_ways_to_make_target = Memoize(generic_ways_to_make_target)
+
+
+def make_target_dynamic_programming(options, target_value):
+    results = [0] * (target_value + 1)
+    results[0] = 1
+    for coin in options:
+        for i in xrange(coin, target_value + 1):
+            results[i] += results[i - coin]
+    return results
 
 
 # Performs Euclid's greatest common divisor problem
@@ -541,6 +550,50 @@ def is_permutation(n, m):
     return sorted(str(n)) == sorted(str(m))
 
 
+root_three = 3.0 ** 0.5
+
+
+def integer_partition_approximation(n):
+    return (1.0 / (4 * n * root_three)) * math.exp(math.pi * (((n << 1) / 3.0) ** 0.5))
+
+
+# Recursively counts the number of integer partitions that sum up to n.
+# The 2 parameters in this case are n and m.
+# n is the base number, in other words the number to be subtracted from.
+# m is the subtractor, the starting value is generally n
+def recursive_integer_partition(n, m):
+    if n <= 1 or m == 0:
+        return 1
+    count = 0
+    for i in xrange(m):
+        new_n = n - m
+        for j in xrange(new_n):
+            count += recursive_integer_partition(new_n, j)
+    return count
+
+
+# Base case, n == 0
+def messing_around(n, m):
+    if n <= 0:
+        return 0
+    count = 0
+    for i in xrange(n):
+        count += 1 + messing_around(n - i)
+    return count
+
+
+"""
+My mental algorithm is as follows:
+1) Given a number "n" that I wish to calculate the partition for, I select a range of
+   subtractors "S" spanning from [0, n - 1].
+
+2) I then iterate over the subtractors, with each entry termed "s", and subtract the
+   value from "n". This difference is termed "diff".
+
+3) If "diff" is 1, then I've reached a base case and I can return 1.
+"""
+
+
 # #######################################################################################################################
 # Date functions
 def is_leap_year(n):
@@ -575,9 +628,6 @@ def days_in_month(month, year):
     if is_leap_year(year) and month == 2:
         return 29
     return NORMAL_DAYS_IN_MONTH[month]
-
-
-from math import sqrt
 
 
 # Copied from: http://programmingpraxis.com/2010/02/19/sieve-of-atkin-improved/

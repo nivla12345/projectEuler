@@ -533,3 +533,12 @@ def p77():
         if num_prime_partitions > 5000:
             return count
         count += 1
+
+
+def p78():
+    limit = 100000
+    vals = Tools.make_target_dynamic_programming(range(limit)[1:], limit)
+    for idx, val in enumerate(vals):
+        if val % 1000000 == 0:
+            print idx, val
+    return
