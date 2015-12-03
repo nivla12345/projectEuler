@@ -17,12 +17,12 @@ result = None
 
 t0 = time.time()
 if constant_iterations == 1:
-    result = problems61_90.p79()
+    result = problems61_90.p80()
     print result
 else:
     for i in xrange(constant_iterations - 1):
-        problems61_90.p79()
-    print problems61_90.p79()
+        problems61_90.p80()
+    print problems61_90.p80()
 t1 = time.time()
 
 print "time (s): ", t1 - t0
