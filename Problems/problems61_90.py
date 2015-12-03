@@ -572,15 +572,17 @@ def p79():
     return len(keys)
 
 
+# Its confusing how decimal numbers also include the integer part of the number...
 def p80():
-    getcontext().prec = 200  # Randomly selected,
+    num_digits = 100
+    getcontext().prec = num_digits << 1  # Randomly selected,
     rationals = set([4, 9, 16, 25, 36, 49, 64, 81])
     sum_digits = 0
     for i in xrange(2, 100):
         if i in rationals:
             continue
         str_dec_value = str(Decimal(i).sqrt())
-        dotless_str_dec_value = str_dec_value.split(".")[1][:100]
+        dotless_str_dec_value = str_dec_value.replace(".", "")[:100]
         for j in dotless_str_dec_value:
             sum_digits += int(j)
     return sum_digits
