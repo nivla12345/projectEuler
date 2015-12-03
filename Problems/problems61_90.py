@@ -542,3 +542,30 @@ def p78():
         if val % 1000000 == 0:
             print idx, val
     return
+
+
+def p79():
+    keys = set()
+    with open('p079_keylog.txt', 'r') as f:
+        for line in f:
+            # Using a set automatically filters out duplicates
+            keys.add(str.strip(line))
+    before_0 = set()
+    after_0 = set()
+    for i in keys:
+        target_key = "3"
+        if target_key in i:
+            zero_index = i.find(target_key)
+            if zero_index > 1:
+                after_0.add(i[1])
+                after_0.add(i[0])
+            elif zero_index == 1:
+                after_0.add(i[0])
+                before_0.add(i[2])
+            else:
+                before_0.add(i[2])
+                before_0.add(i[1])
+    print "before: ", sorted(before_0)
+    print "after: ", sorted(after_0)
+    print keys
+    return len(keys)
