@@ -586,3 +586,36 @@ def p80():
         for j in dotless_str_dec_value:
             sum_digits += int(j)
     return sum_digits
+
+
+def p81():
+    dim = 80
+    grid = []
+    # Initialize a 2x2 array of 0's, have to do it in this strange way to prevent aliasing
+    min_grid = [[0 for row in range(dim)] for col in range(dim)]
+    # Read file
+    with open('p081_matrix.txt', 'r') as f:
+        for line in f:
+            int_line = map(int, line.split(","))
+            grid.append(tuple(int_line))
+
+    # Set base min_grid value
+    min_grid[0][0] = grid[0][0]
+
+    # Set edge minimums
+    # top horizontal edge
+    for i in xrange(1, dim):
+        min_grid[0][i] = grid[0][i] + min_grid[0][i - 1]
+
+    # top vertical edge
+    for i in xrange(1, dim):
+        min_grid[i][0] = grid[i][0] + min_grid[i - 1][0]
+
+    # Fill in the rest of the grid row by row
+    for i in xrange(1, dim):
+        for j in xrange(1, dim):
+            up_min = grid[i][j] + min_grid[i - 1][j]
+            left_min = grid[i][j] + min_grid[i][j - 1]
+            min_grid[i][j] = min(up_min, left_min)
+
+    return min_grid[-1][-1]
